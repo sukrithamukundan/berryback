@@ -11,6 +11,7 @@ import { Smartphone, Monitor } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CategoryView from "@/components/CategoryView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import BottomNavBar from "@/components/BottomNavBar";
 
 const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
@@ -26,6 +27,9 @@ const Index = () => {
     const checkLoginStatus = () => {
       const loggedIn = localStorage.getItem("isLoggedIn") === "true";
       setIsLoggedIn(loggedIn);
+      if (loggedIn) {
+        setRole("consumer"); // Auto-set to consumer when logged in
+      }
     };
     
     checkLoginStatus();
@@ -43,6 +47,7 @@ const Index = () => {
     // For demo only - in a real app this would be handled properly
     localStorage.setItem("isLoggedIn", "true");
     setIsLoggedIn(true);
+    setRole("consumer");
   };
 
   // Content to be rendered inside either the normal view or the phone preview
@@ -77,7 +82,7 @@ const Index = () => {
           <HowItWorks />
         </div>
       ) : isLoggedIn && role === "consumer" ? (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 pb-20"> {/* Added padding at bottom for the nav bar */}
           <div className="mb-6">
             <h1 className="text-2xl font-bold mb-4 text-[#472D21]">Browse Surplus Food</h1>
             <Tabs defaultValue="all" className="w-full">
@@ -110,9 +115,10 @@ const Index = () => {
               </TabsContent>
             </Tabs>
           </div>
+          <BottomNavBar />
         </div>
       ) : (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 pb-20"> {/* Added padding at bottom for the nav bar */}
           <Button 
             variant="outline" 
             onClick={() => setRole(null)} 
@@ -141,6 +147,7 @@ const Index = () => {
               </Button>
             </div>
           </div>
+          <BottomNavBar />
         </div>
       )}
     </>
@@ -170,7 +177,7 @@ const Index = () => {
         content
       )}
       
-      <Footer />
+      {!isLoggedIn && <Footer />}
     </div>
   );
 };

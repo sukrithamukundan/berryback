@@ -7,10 +7,14 @@ const Auth = () => {
   const navigate = useNavigate();
   
   const handleSignIn = () => {
+    // For demo purposes, set the user as logged in
+    localStorage.setItem("isLoggedIn", "true");
     navigate('/');
   };
   
   const handleCreateAccount = () => {
+    // For demo purposes, set the user as logged in
+    localStorage.setItem("isLoggedIn", "true");
     navigate('/');
   };
 
