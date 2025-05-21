@@ -1,43 +1,10 @@
-
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import BottomNavBar from "@/components/BottomNavBar";
-import { MapPin, ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState(0);
-  
-  useEffect(() => {
-    // Load cart items from localStorage and count them
-    const cartJSON = localStorage.getItem('foodCart');
-    if (cartJSON) {
-      const cart = JSON.parse(cartJSON);
-      const itemCount = cart.reduce((sum: number, item: any) => sum + item.quantity, 0);
-      setCartItems(itemCount);
-    }
-    
-    // Add event listener to update cart count when storage changes
-    const handleStorageChange = () => {
-      const updatedCartJSON = localStorage.getItem('foodCart');
-      if (updatedCartJSON) {
-        const updatedCart = JSON.parse(updatedCartJSON);
-        const updatedItemCount = updatedCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
-        setCartItems(updatedItemCount);
-      } else {
-        setCartItems(0);
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('cartUpdated', handleStorageChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('cartUpdated', handleStorageChange);
-    };
-  }, []);
   
   const handleLogout = () => {
     // Remove logged in status
@@ -47,28 +14,13 @@ const Profile = () => {
     // Reload page to reflect changes
     window.location.reload();
   };
-
-  const navigateToOrders = () => {
-    navigate('/orders');
-  };
   
   // App Bar Component
   const AppBar = () => (
     <div className="bg-[#472D21] text-white p-4 flex justify-between items-center shadow-md sticky top-0 z-10">
       <div className="text-xl font-bold">BerryBack</div>
       <div className="flex items-center space-x-4">
-        <div className="flex items-center cursor-pointer">
-          <MapPin className="w-5 h-5 mr-1" />
-          <span>Trivandrum</span>
-        </div>
-        <div className="relative cursor-pointer" onClick={navigateToOrders}>
-          <ShoppingCart className="w-6 h-6" />
-          {cartItems > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-              {cartItems > 99 ? '99+' : cartItems}
-            </span>
-          )}
-        </div>
+        {/* Location and cart icons removed */}
       </div>
     </div>
   );

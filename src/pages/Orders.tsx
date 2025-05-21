@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNavBar from "@/components/BottomNavBar";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Trash2, ArrowLeft, CheckCircle, History, PackageOpen, MapPin } from "lucide-react";
+import { ShoppingCart, Trash2, ArrowLeft, CheckCircle, History, PackageOpen } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { 
   AlertDialog,
@@ -128,18 +128,7 @@ const Orders = () => {
     <div className="bg-[#472D21] text-white p-4 flex justify-between items-center shadow-md sticky top-0 z-10">
       <div className="text-xl font-bold">BerryBack</div>
       <div className="flex items-center space-x-4">
-        <div className="flex items-center cursor-pointer">
-          <MapPin className="w-5 h-5 mr-1" />
-          <span>Trivandrum</span>
-        </div>
-        <div className="relative cursor-pointer" onClick={navigateToOrders}>
-          <ShoppingCart className="w-6 h-6" />
-          {cartCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-              {cartCount > 99 ? '99+' : cartCount}
-            </span>
-          )}
-        </div>
+        {/* Location and cart icons removed */}
       </div>
     </div>
   );
