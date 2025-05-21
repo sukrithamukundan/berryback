@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UtensilsCrossed, Store, ChefHat, Cake, ShoppingBag, Filter, Search, ArrowDownAZ, ArrowUpAZ } from "lucide-react";
@@ -376,15 +375,7 @@ const CategoryView = ({ category }: CategoryViewProps) => {
                 </div>
               </CardContent>
               <CardFooter className="pt-0">
-                <Button 
-                  className="w-full bg-[#472D21] hover:bg-[#5A392C]"
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent card click when button is clicked
-                    // Handle reserve action
-                  }}
-                >
-                  Reserve
-                </Button>
+                {/* Empty footer kept for consistent spacing */}
               </CardFooter>
             </Card>
           ))}
