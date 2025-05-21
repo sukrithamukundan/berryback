@@ -1,10 +1,18 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNavBar from "@/components/BottomNavBar";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Trash2, ArrowLeft } from "lucide-react";
+import { ShoppingCart, Trash2, ArrowLeft, CheckCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from "@/components/ui/alert-dialog";
 
 interface CartItem {
   id: number;
@@ -19,6 +27,7 @@ interface CartItem {
 
 const Orders = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,13 +65,16 @@ const Orders = () => {
   };
 
   const checkout = () => {
-    toast({
-      title: "Order placed!",
-      description: "Your order has been successfully placed.",
-    });
+    // Show confirmation modal instead of immediate toast
+    setShowConfirmation(true);
+  };
+
+  const confirmOrder = () => {
     // Clear cart after checkout
     updateCartAndNotify([]);
     localStorage.removeItem('foodCart');
+    // Close the confirmation dialog
+    setShowConfirmation(false);
   };
 
   const totalPrice = cartItems.reduce((sum, item) => sum + (item.discountedPrice * item.quantity), 0);
@@ -167,6 +179,35 @@ const Orders = () => {
           </Button>
         </>
       )}
+      
+      {/* Order Confirmation Dialog */}
+      <AlertDialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <div className="flex flex-col items-center mb-4">
+              <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                <CheckCircle className="h-8 w-8 text-green-600" />
+              </div>
+              <AlertDialogTitle className="text-2xl">Order Placed!</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="text-center">
+              <p className="mb-2">Your order has been successfully placed.</p> 
+              <p className="mb-4">Check your email for pickup details.</p>
+              <div className="bg-amber-50 p-3 rounded-lg border border-amber-200 mb-4">
+                <p className="text-amber-800 font-medium">Remember to pick up your food on time to reduce food waste!</p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col">
+            <AlertDialogAction 
+              className="w-full bg-[#472D21] hover:bg-[#5A392C]" 
+              onClick={confirmOrder}
+            >
+              Continue Shopping
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
       <BottomNavBar />
     </div>
