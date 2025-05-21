@@ -6,8 +6,7 @@ import HeroSection from "@/components/HeroSection";
 import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
 import SplashScreen from "@/components/SplashScreen";
-import PhonePreview from "@/components/PhonePreview";
-import { Smartphone, Monitor, MapPin, ShoppingCart } from "lucide-react";
+import { MapPin, ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CategoryView from "@/components/CategoryView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,7 +19,6 @@ interface IndexProps {
 const Index = ({ skipSplash = false }: IndexProps) => {
   const [showSplash, setShowSplash] = useState(!skipSplash);
   const [role, setRole] = useState<"consumer" | "business" | null>(null);
-  const [showPhonePreview, setShowPhonePreview] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cartItems, setCartItems] = useState(0);
   const navigate = useNavigate();
@@ -43,10 +41,6 @@ const Index = ({ skipSplash = false }: IndexProps) => {
   if (showSplash && !skipSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
-
-  const togglePreviewMode = () => {
-    setShowPhonePreview(!showPhonePreview);
-  };
 
   const handleLogin = () => {
     // For demo purposes - in a real app this would be handled properly
@@ -76,7 +70,7 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     </div>
   );
 
-  // Content to be rendered inside either the normal view or the phone preview
+  // Content to be rendered
   const content = (
     <>
       {!role && !isLoggedIn ? (
@@ -186,27 +180,7 @@ const Index = ({ skipSplash = false }: IndexProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Preview mode toggle */}
-      <div className="fixed top-4 right-4 z-50">
-        <Button
-          variant="outline"
-          size="sm"
-          className="rounded-full w-10 h-10 p-0 border-[#472D21] text-[#472D21]"
-          onClick={togglePreviewMode}
-        >
-          {showPhonePreview ? <Monitor className="w-5 h-5" /> : <Smartphone className="w-5 h-5" />}
-        </Button>
-      </div>
-
-      {showPhonePreview ? (
-        <div className="container mx-auto py-8 flex justify-center">
-          <PhonePreview>
-            {content}
-          </PhonePreview>
-        </div>
-      ) : (
-        content
-      )}
+      {content}
       
       {!isLoggedIn && <Footer />}
     </div>
