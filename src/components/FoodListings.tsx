@@ -18,8 +18,8 @@ const FoodListings = () => {
   const [view, setView] = useState<"list" | "map">("list");
   const [sortBy, setSortBy] = useState<"distance" | "price" | "discount">("distance");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [filterDistance, setFilterDistance] = useState<[number]>([5]); // max distance in miles
-  const [filterPrice, setFilterPrice] = useState<[number, number]>([0, 25]); // price range
+  const [filterDistance, setFilterDistance] = useState<number[]>([5]); // max distance in miles
+  const [filterPrice, setFilterPrice] = useState<number[]>([0, 25]); // price range
   const [filterTypes, setFilterTypes] = useState<{veg: boolean, nonVeg: boolean}>({ veg: true, nonVeg: true });
   const [showFilters, setShowFilters] = useState(false);
   
@@ -101,10 +101,7 @@ const FoodListings = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <Button variant="outline" onClick={() => window.location.reload()}>
-          Back
-        </Button>
+      <div className="flex justify-end items-center mb-8">
         <div className="flex gap-2">
           <Button 
             variant={view === "list" ? "default" : "outline"}
@@ -177,7 +174,7 @@ const FoodListings = () => {
                 max={10}
                 step={0.5}
                 value={filterDistance}
-                onValueChange={setFilterDistance}
+                onValueChange={(value) => setFilterDistance(value)}
                 className="mb-2"
               />
               <div className="flex justify-between text-xs text-gray-500">
@@ -197,7 +194,7 @@ const FoodListings = () => {
                 max={50}
                 step={1}
                 value={filterPrice}
-                onValueChange={setFilterPrice}
+                onValueChange={(value) => setFilterPrice(value)}
                 className="mb-2"
               />
               <div className="flex justify-between text-xs text-gray-500">
