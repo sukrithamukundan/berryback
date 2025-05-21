@@ -43,6 +43,37 @@ const FoodItemDetails = () => {
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
+    // Load cart items from localStorage and count them
+    const cartJSON = localStorage.getItem('foodCart');
+    if (cartJSON) {
+      const cartItems: CartItem[] = JSON.parse(cartJSON);
+      const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+      setCartCount(itemCount);
+    }
+    
+    // Add event listener to update cart count when storage changes
+    const handleStorageChange = () => {
+      const updatedCartJSON = localStorage.getItem('foodCart');
+      if (updatedCartJSON) {
+        const updatedCartItems: CartItem[] = JSON.parse(updatedCartJSON);
+        const updatedItemCount = updatedCartItems.reduce((sum, item) => sum + item.quantity, 0);
+        setCartCount(updatedItemCount);
+      } else {
+        setCartCount(0);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    // Custom event for when we update cart within the same window
+    window.addEventListener('cartUpdated', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('cartUpdated', handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
     // In a real app, this would be an API call
     // For now, we'll use mock data with extended properties
     const mockItems = [
