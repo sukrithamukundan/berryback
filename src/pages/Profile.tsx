@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import BottomNavBar from "@/components/BottomNavBar";
+import { MapPin } from "lucide-react";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -15,9 +16,24 @@ const Profile = () => {
     window.location.reload();
   };
   
+  // App Bar Component
+  const AppBar = () => (
+    <div className="bg-[#472D21] text-white p-4 flex justify-between items-center shadow-md sticky top-0 z-10">
+      <div className="text-xl font-bold">BerryBack</div>
+      <div className="flex items-center space-x-4">
+        <div className="flex items-center cursor-pointer">
+          <MapPin className="w-5 h-5 mr-1" />
+          <span>Trivandrum</span>
+        </div>
+      </div>
+    </div>
+  );
+  
   return (
     <div className="container mx-auto px-4 py-8 pb-20">
-      <h1 className="text-2xl font-bold mb-6 text-[#472D21]">Your Profile</h1>
+      <AppBar />
+      
+      <h1 className="text-2xl font-bold mb-6 mt-4 text-[#472D21]">Your Profile</h1>
       
       <div className="bg-white rounded-lg shadow p-6 mb-6">
         <div className="flex items-center space-x-4 mb-6">
