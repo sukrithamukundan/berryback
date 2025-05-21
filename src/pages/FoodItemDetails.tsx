@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MapPin, Clock, Star, Info, Plus, Minus } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, Star, Info, Plus, Minus, ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
+import BottomNavBar from "@/components/BottomNavBar";
 
 // Define the food item type
 interface FoodItem {
@@ -184,14 +185,23 @@ const FoodItemDetails = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Button 
-        variant="outline" 
-        onClick={() => navigate(-1)} 
-        className="mb-6"
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" /> Back
-      </Button>
+    <div className="container mx-auto px-4 py-8 pb-20">
+      <div className="flex justify-between items-center mb-6">
+        <Button 
+          variant="outline" 
+          onClick={() => navigate(-1)} 
+          className="flex items-center"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back
+        </Button>
+        <Button 
+          variant="outline"
+          onClick={() => navigate('/orders')}
+          className="flex items-center"
+        >
+          <ShoppingCart className="h-5 w-5" />
+        </Button>
+      </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="relative h-[300px] md:h-[400px] bg-gray-200 rounded-lg overflow-hidden">
@@ -323,6 +333,8 @@ const FoodItemDetails = () => {
           </Button>
         </div>
       </div>
+      
+      <BottomNavBar />
     </div>
   );
 };
