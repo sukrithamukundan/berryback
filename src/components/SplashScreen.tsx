@@ -63,7 +63,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
         </div>
 
         <h1 className={`text-4xl font-bold mb-3 transition-all duration-700 ${animationStage >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} text-[#472D21]`}>
-          Waste-to-Table
+          Berry Back
         </h1>
         
         <p className={`text-lg mb-12 transition-all duration-700 ${animationStage >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} text-[#472D21]`}>
