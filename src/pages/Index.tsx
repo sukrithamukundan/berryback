@@ -1,12 +1,82 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import FoodListings from "@/components/FoodListings";
+import HeroSection from "@/components/HeroSection";
+import HowItWorks from "@/components/HowItWorks";
+import Footer from "@/components/Footer";
+import SplashScreen from "@/components/SplashScreen";
 
 const Index = () => {
+  const [showSplash, setShowSplash] = useState(true);
+  const [role, setRole] = useState<"consumer" | "business" | null>(null);
+
+  if (showSplash) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      {!role ? (
+        <div className="container mx-auto px-4 py-16 flex flex-col items-center">
+          <HeroSection />
+          <div className="mt-12 space-y-6 text-center">
+            <h2 className="text-2xl font-bold">I am a...</h2>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg" 
+                className="bg-green-600 hover:bg-green-700"
+                onClick={() => setRole("consumer")}
+              >
+                Consumer Looking for Deals
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-green-600 text-green-600 hover:bg-green-50"
+                onClick={() => setRole("business")}
+              >
+                Business with Surplus Food
+              </Button>
+            </div>
+          </div>
+          <HowItWorks />
+        </div>
+      ) : role === "consumer" ? (
+        <FoodListings />
+      ) : (
+        <div className="container mx-auto px-4 py-8">
+          <Button 
+            variant="outline" 
+            onClick={() => setRole(null)} 
+            className="mb-6"
+          >
+            Back
+          </Button>
+          <h1 className="text-2xl font-bold mb-6">Business Dashboard</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="border rounded-lg p-6 shadow-sm">
+              <h2 className="text-xl font-semibold mb-4">List New Surplus</h2>
+              <p className="text-muted-foreground mb-4">
+                Add details about food items you currently have in surplus.
+              </p>
+              <Button className="bg-green-600 hover:bg-green-700">
+                Add New Listing
+              </Button>
+            </div>
+            <div className="border rounded-lg p-6 shadow-sm">
+              <h2 className="text-xl font-semibold mb-4">Surplus Insights</h2>
+              <p className="text-muted-foreground mb-4">
+                View patterns and analytics about your food waste.
+              </p>
+              <Button className="bg-green-600 hover:bg-green-700">
+                View Report
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+      <Footer />
     </div>
   );
 };
