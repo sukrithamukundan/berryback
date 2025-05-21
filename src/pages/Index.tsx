@@ -6,19 +6,27 @@ import HeroSection from "@/components/HeroSection";
 import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
 import SplashScreen from "@/components/SplashScreen";
+import PhonePreview from "@/components/PhonePreview";
+import { Smartphone, Monitor } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [role, setRole] = useState<"consumer" | "business" | null>(null);
+  const [showPhonePreview, setShowPhonePreview] = useState(false);
   const navigate = useNavigate();
 
   if (showSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
-  return (
-    <div className="min-h-screen bg-background">
+  const togglePreviewMode = () => {
+    setShowPhonePreview(!showPhonePreview);
+  };
+
+  // Content to be rendered inside either the normal view or the phone preview
+  const content = (
+    <>
       {!role ? (
         <div className="container mx-auto px-4 py-16 flex flex-col items-center">
           <HeroSection />
@@ -78,6 +86,33 @@ const Index = () => {
           </div>
         </div>
       )}
+    </>
+  );
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Preview mode toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-full w-10 h-10 p-0 border-[#472D21] text-[#472D21]"
+          onClick={togglePreviewMode}
+        >
+          {showPhonePreview ? <Monitor className="w-5 h-5" /> : <Smartphone className="w-5 h-5" />}
+        </Button>
+      </div>
+
+      {showPhonePreview ? (
+        <div className="container mx-auto py-8 flex justify-center">
+          <PhonePreview>
+            {content}
+          </PhonePreview>
+        </div>
+      ) : (
+        content
+      )}
+      
       <Footer />
     </div>
   );
