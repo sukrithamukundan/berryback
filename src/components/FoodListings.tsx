@@ -12,7 +12,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Filter, SlidersHorizontal, ArrowDownAZ, ArrowUpAZ } from "lucide-react";
+import { Filter, SlidersHorizontal, ArrowDownAZ, ArrowUpAZ, Search } from "lucide-react";
 
 const FoodListings = () => {
   const [view, setView] = useState<"list" | "map">("list");
@@ -22,6 +22,7 @@ const FoodListings = () => {
   const [filterPrice, setFilterPrice] = useState<number[]>([0, 25]); // price range
   const [filterTypes, setFilterTypes] = useState<{veg: boolean, nonVeg: boolean}>({ veg: true, nonVeg: true });
   const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   
   const mockListings = [
     {
@@ -59,8 +60,15 @@ const FoodListings = () => {
     }
   ];
 
-  // Apply filters and sorting
+  // Apply filters, search and sorting
   const filteredAndSortedListings = [...mockListings]
+    // Apply search filter
+    .filter(listing => {
+      if (searchQuery.trim() === "") return true;
+      const query = searchQuery.toLowerCase();
+      return listing.name.toLowerCase().includes(query) || 
+             listing.business.toLowerCase().includes(query);
+    })
     // Apply filters
     .filter(listing => {
       // Distance filter
@@ -158,6 +166,31 @@ const FoodListings = () => {
         </div>
       </div>
 
+      {/* Search Bar */}
+      <div className="mb-6 relative">
+        <div className="flex items-center border rounded-md focus-within:ring-2 focus-within:ring-[#472D21] bg-white">
+          <Search className="ml-3 h-5 w-5 text-[#472D21]" />
+          <Input
+            type="text"
+            placeholder="Search for food items or providers..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-1 border-0 focus-visible:ring-0 focus-visible:outline-none"
+          />
+          {searchQuery && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSearchQuery("")}
+              className="mr-1 h-7 w-7 rounded-full p-0"
+            >
+              <span className="sr-only">Clear</span>
+              <span className="h-4 w-4 text-[#472D21]">×</span>
+            </Button>
+          )}
+        </div>
+      </div>
+
       {/* Filter Section */}
       {showFilters && (
         <div className="mb-8 p-4 border rounded-md bg-white shadow-sm">
@@ -235,12 +268,15 @@ const FoodListings = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAndSortedListings.length === 0 ? (
             <div className="col-span-full text-center py-12 bg-gray-50 rounded-lg">
-              <p className="text-muted-foreground">No results match your filters</p>
+              <p className="text-muted-foreground">
+                {searchQuery ? `No results found for "${searchQuery}"` : "No results match your filters"}
+              </p>
               <Button className="mt-4" onClick={() => {
                 setFilterDistance([5]);
                 setFilterPrice([0, 25]);
                 setFilterTypes({veg: true, nonVeg: true});
-              }}>Reset Filters</Button>
+                setSearchQuery("");
+              }}>Reset All</Button>
             </div>
           ) : (
             filteredAndSortedListings.map((listing) => (
