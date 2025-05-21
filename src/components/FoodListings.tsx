@@ -108,15 +108,7 @@ const FoodListings = () => {
                     {listing.distance} miles • {listing.timeLeft} left
                   </div>
                 </div>
-                <Button 
-                  className="w-full mt-4 bg-[#472D21] hover:bg-[#5A392C]"
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent card click when button is clicked
-                    // Handle reserve action
-                  }}
-                >
-                  Reserve
-                </Button>
+                {/* Reserve button removed */}
               </div>
             </div>
           ))}
