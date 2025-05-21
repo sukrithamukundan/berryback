@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MapPin, Clock, Star, Info, Plus, Minus, ShoppingCart } from "lucide-react";
@@ -41,6 +40,7 @@ const FoodItemDetails = () => {
   const [item, setItem] = useState<FoodItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     // In a real app, this would be an API call
@@ -185,6 +185,9 @@ const FoodItemDetails = () => {
     // Save updated cart to localStorage
     localStorage.setItem('foodCart', JSON.stringify(updatedCart));
     
+    // Dispatch custom event after cart update
+    window.dispatchEvent(new Event('cartUpdated'));
+    
     toast({
       title: "Item added to cart!",
       description: `You've added ${quantity} ${quantity > 1 ? 'items' : 'item'} of ${item.name} to your cart`,
@@ -233,9 +236,14 @@ const FoodItemDetails = () => {
         <Button 
           variant="outline"
           onClick={() => navigate('/orders')}
-          className="flex items-center"
+          className="flex items-center relative"
         >
           <ShoppingCart className="h-5 w-5" />
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              {cartCount > 99 ? '99+' : cartCount}
+            </span>
+          )}
         </Button>
       </div>
       

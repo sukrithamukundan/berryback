@@ -29,10 +29,16 @@ const Orders = () => {
     }
   }, []);
 
-  const removeFromCart = (id: number) => {
-    const updatedCart = cartItems.filter(item => item.id !== id);
+  const updateCartAndNotify = (updatedCart: CartItem[]) => {
     setCartItems(updatedCart);
     localStorage.setItem('foodCart', JSON.stringify(updatedCart));
+    // Dispatch custom event to notify other components about cart update
+    window.dispatchEvent(new Event('cartUpdated'));
+  };
+
+  const removeFromCart = (id: number) => {
+    const updatedCart = cartItems.filter(item => item.id !== id);
+    updateCartAndNotify(updatedCart);
     toast({
       title: "Item removed",
       description: "The item has been removed from your cart.",
@@ -46,8 +52,7 @@ const Orders = () => {
       item.id === id ? { ...item, quantity: newQuantity } : item
     );
     
-    setCartItems(updatedCart);
-    localStorage.setItem('foodCart', JSON.stringify(updatedCart));
+    updateCartAndNotify(updatedCart);
   };
 
   const checkout = () => {
@@ -56,7 +61,7 @@ const Orders = () => {
       description: "Your order has been successfully placed.",
     });
     // Clear cart after checkout
-    setCartItems([]);
+    updateCartAndNotify([]);
     localStorage.removeItem('foodCart');
   };
 
