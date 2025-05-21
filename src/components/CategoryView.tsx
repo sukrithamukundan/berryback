@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Restaurant, Store, Catering, Cake, ShoppingBag } from "lucide-react";
+import { UtensilsCrossed, Store, ChefHat, Cake, ShoppingBag } from "lucide-react";
 
 interface CategoryViewProps {
   category: "restaurant" | "retailer" | "catering" | "confectionery";
@@ -10,11 +10,11 @@ interface CategoryViewProps {
 const getCategoryIcon = (category: string) => {
   switch (category) {
     case "restaurant":
-      return <Restaurant className="w-5 h-5" />;
+      return <UtensilsCrossed className="w-5 h-5" />;
     case "retailer":
       return <Store className="w-5 h-5" />;
     case "catering":
-      return <Catering className="w-5 h-5" />;
+      return <ChefHat className="w-5 h-5" />;
     case "confectionery":
       return <Cake className="w-5 h-5" />;
     default:
