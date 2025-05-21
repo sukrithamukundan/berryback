@@ -49,6 +49,10 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     setRole("consumer");
   };
 
+  const navigateToOrders = () => {
+    navigate('/orders');
+  };
+
   // App Bar Component
   const AppBar = () => (
     <div className="bg-[#472D21] text-white p-4 flex justify-between items-center shadow-md sticky top-0 z-10">
@@ -58,7 +62,7 @@ const Index = ({ skipSplash = false }: IndexProps) => {
           <MapPin className="w-5 h-5 mr-1" />
           <span>Trivandrum</span>
         </div>
-        <div className="relative cursor-pointer">
+        <div className="relative cursor-pointer" onClick={navigateToOrders}>
           <ShoppingCart className="w-6 h-6" />
           {cartItems > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
