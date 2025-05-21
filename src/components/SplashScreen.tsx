@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -9,6 +10,7 @@ interface SplashScreenProps {
 
 const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   const [animationStage, setAnimationStage] = useState(0);
+  const navigate = useNavigate();
   
   useEffect(() => {
     const timer1 = setTimeout(() => setAnimationStage(1), 1000);
@@ -22,61 +24,60 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     };
   }, []);
 
+  const handleGetStarted = () => {
+    navigate('/auth');
+    onComplete();
+  };
+
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-green-50 to-blue-50 flex flex-col items-center justify-center z-50">
-      <div className="max-w-md text-center px-4">
+    <div className="fixed inset-0 bg-white flex flex-col items-center justify-center z-50 px-6">
+      <div className="max-w-xs w-full text-center">
         <div className="mb-8">
           <div className={`transition-all duration-700 ${animationStage >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="h-24 w-24 mx-auto mb-4 rounded-full bg-green-600 flex items-center justify-center">
+            <div className="h-32 w-32 mx-auto mb-6">
               <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 24 24" 
+                viewBox="0 0 100 100" 
                 fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className="w-12 h-12 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-full h-full"
               >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-                <path d="M8 11h8" />
-                <path d="M12 15V7" />
+                <path 
+                  d="M50 90c22.1 0 40-17.9 40-40S72.1 10 50 10 10 27.9 10 50s17.9 40 40 40z" 
+                  stroke="#472D21" 
+                  strokeWidth="4"
+                  fill="#FFF"
+                />
+                <path 
+                  d="M65 45c0 8.3-6.7 15-15 15s-15-6.7-15-15 6.7-15 15-15 15 6.7 15 15z" 
+                  fill="#472D21" 
+                />
+                <path 
+                  d="M37 70c0-7.2 5.8-13 13-13s13 5.8 13 13" 
+                  stroke="#472D21" 
+                  strokeWidth="4" 
+                  strokeLinecap="round"
+                />
               </svg>
             </div>
           </div>
         </div>
 
-        <h1 className={`text-4xl font-bold mb-3 transition-all duration-700 ${animationStage >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <span className="text-green-600">Waste-to-Table</span> Connect
+        <h1 className={`text-4xl font-bold mb-3 transition-all duration-700 ${animationStage >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} text-[#472D21]`}>
+          Waste-to-Table
         </h1>
         
-        <p className={`text-lg text-gray-600 mb-8 transition-all duration-700 ${animationStage >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          Fighting food waste by connecting surplus to people in need
+        <p className={`text-lg mb-12 transition-all duration-700 ${animationStage >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} text-[#472D21]`}>
+          Why wait in line when you can have your discounted food ready and waiting for you?
         </p>
         
-        <div className={`transition-all duration-700 ${animationStage >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`space-y-3 transition-all duration-700 ${animationStage >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <Button 
-            onClick={onComplete}
-            className="bg-green-600 hover:bg-green-700 px-6"
+            onClick={handleGetStarted}
+            className="bg-[#472D21] hover:bg-[#5A392C] w-full text-lg py-6"
             size="lg"
           >
-            Get Started <ArrowRight className="ml-2 h-4 w-4" />
+            Get Started
           </Button>
-        </div>
-      </div>
-      
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-8 text-sm text-gray-500">
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          <span>Reduce Waste</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-          <span>Save Money</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-          <span>Help Community</span>
         </div>
       </div>
     </div>

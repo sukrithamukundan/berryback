@@ -1,18 +1,25 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  
+  const handleGetStarted = () => {
+    navigate('/auth');
+  };
+  
   return (
     <div className="text-center">
       <h1 className="text-4xl md:text-5xl font-bold mb-6">
-        <span className="text-green-600">Waste-to-Table</span> Connect
+        <span className="text-[#472D21]">Waste-to-Table</span> Connect
       </h1>
-      <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+      <p className="text-xl text-[#472D21] max-w-2xl mx-auto mb-8">
         Reducing food waste by connecting surplus food from restaurants and 
         retailers with consumers at discounted prices.
       </p>
-      <div className="flex justify-center gap-4 flex-wrap">
+      <div className="flex justify-center gap-4 flex-wrap mb-10">
         <div className="flex items-center gap-2 bg-green-100 px-4 py-2 rounded-full">
           <span className="text-green-700 font-medium">1.05B</span>
           <span className="text-sm text-green-600">tons wasted annually</span>
@@ -26,6 +33,14 @@ const HeroSection = () => {
           <span className="text-sm text-blue-600">of global emissions</span>
         </div>
       </div>
+      
+      <Button
+        onClick={handleGetStarted}
+        className="bg-[#472D21] hover:bg-[#5A392C] px-8 py-6 text-lg"
+        size="lg"
+      >
+        Get Started <ArrowRight className="ml-2" />
+      </Button>
     </div>
   );
 };

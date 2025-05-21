@@ -1,22 +1,22 @@
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-50 border-t mt-12">
+    <footer className="bg-[#F5F3F2] mt-12">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
             <h3 className="font-bold text-lg">
-              <span className="text-green-600">Waste-to-Table</span> Connect
+              <span className="text-[#472D21]">Waste-to-Table</span> Connect
             </h3>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-[#472D21]/70 mt-1">
               Fighting food waste, one meal at a time.
             </p>
           </div>
           
           <div className="flex gap-8">
             <div>
-              <h4 className="font-medium mb-2">About</h4>
-              <ul className="text-sm space-y-1 text-muted-foreground">
+              <h4 className="font-medium mb-2 text-[#472D21]">About</h4>
+              <ul className="text-sm space-y-1 text-[#472D21]/70">
                 <li>Our Mission</li>
                 <li>How It Works</li>
                 <li>For Businesses</li>
@@ -25,8 +25,8 @@ const Footer = () => {
             </div>
             
             <div>
-              <h4 className="font-medium mb-2">Connect</h4>
-              <ul className="text-sm space-y-1 text-muted-foreground">
+              <h4 className="font-medium mb-2 text-[#472D21]">Connect</h4>
+              <ul className="text-sm space-y-1 text-[#472D21]/70">
                 <li>Contact Us</li>
                 <li>Support</li>
                 <li>Partnerships</li>
@@ -35,7 +35,7 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t mt-8 pt-6 text-sm text-center text-muted-foreground">
+        <div className="border-t border-[#472D21]/20 mt-8 pt-6 text-sm text-center text-[#472D21]/70">
           © {new Date().getFullYear()} Waste-to-Table Connect. All rights reserved.
         </div>
       </div>
