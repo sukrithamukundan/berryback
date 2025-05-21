@@ -107,7 +107,15 @@ const FoodItemDetails = () => {
         timeLeft: "2 hours",
         image: "https://images.unsplash.com/photo-1556761223-4c4282c73f77?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80",
         type: "nonVeg" as const,
-        description: "Fresh pasta with our signature sauce and garnishes. This kit includes everything you need to prepare a restaurant-quality Italian dinner in minutes."
+        description: "Fresh pasta with our signature sauce and garnishes. This kit includes everything you need to prepare a restaurant-quality Italian dinner in minutes.",
+        address: "456 Italian Ave, San Francisco, CA 94110",
+        rating: 4.5,
+        reviews: 98,
+        pickupStart: "5:30 PM",
+        pickupEnd: "7:00 PM",
+        postedTime: "30 mins ago",
+        bestBefore: "today, 8:00 PM",
+        ingredients: ["Pasta", "Tomato Sauce", "Herbs", "Parmesan Cheese"]
       },
       {
         id: 3,
@@ -117,7 +125,7 @@ const FoodItemDetails = () => {
         discountedPrice: 6,
         distance: 0.5,
         timeLeft: "5 hours",
-        image: "https://images.unsplash.com/photo-1518843875459-f738682238a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80",
+        image: "https://images.unsplash.com/photo-1518843724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80",
         type: "veg" as const,
         description: "A seasonal selection of fresh locally-grown vegetables. May include carrots, broccoli, bell peppers, onions, potatoes, and more depending on availability."
       },
@@ -171,7 +179,13 @@ const FoodItemDetails = () => {
       },
     ];
 
-    const foundItem = mockItems.find(item => item.id === Number(id));
+    // Parse ID as number for proper comparison
+    const parsedId = Number(id);
+    console.log("Looking for item with ID:", parsedId);
+    
+    const foundItem = mockItems.find(item => item.id === parsedId);
+    console.log("Found item:", foundItem);
+    
     setItem(foundItem || null);
     setLoading(false);
   }, [id]);

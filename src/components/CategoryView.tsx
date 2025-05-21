@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UtensilsCrossed, Store, ChefHat, Cake, ShoppingBag, Filter, Search, ArrowDownAZ, ArrowUpAZ } from "lucide-react";
@@ -29,7 +30,7 @@ const getCategoryIcon = (category: string) => {
 const mockListingsByCategory = {
   restaurant: [
     {
-      id: 1,
+      id: 2, // Changed from 1 to 2 to match the correct ID in FoodItemDetails
       name: "Pasta & Sauce Meal Kit",
       business: "Luigi's Restaurant",
       originalPrice: 18,
@@ -40,7 +41,7 @@ const mockListingsByCategory = {
       type: "nonVeg"
     },
     {
-      id: 2,
+      id: 6, // Changed from 2 to 6 to match a unique ID
       name: "Asian Fusion Bowl",
       business: "Wok & Roll",
       originalPrice: 16,
