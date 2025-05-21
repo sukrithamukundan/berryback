@@ -1,20 +1,29 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const handleSignIn = () => {
     // For demo purposes, set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
+    toast({
+      title: "Welcome back!",
+      description: "You've been successfully signed in.",
+    });
     navigate('/');
   };
   
   const handleCreateAccount = () => {
     // For demo purposes, set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
+    toast({
+      title: "Account created!",
+      description: "Your account has been successfully created.",
+    });
     navigate('/');
   };
 
