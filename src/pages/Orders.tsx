@@ -38,13 +38,17 @@ const Orders = () => {
   const [orderHistory, setOrderHistory] = useState<OrderHistoryItem[]>([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("cart");
+  const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Load cart items from localStorage
     const cartJSON = localStorage.getItem('foodCart');
     if (cartJSON) {
-      setCartItems(JSON.parse(cartJSON));
+      const items = JSON.parse(cartJSON);
+      setCartItems(items);
+      const itemCount = items.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+      setCartCount(itemCount);
     }
     
     // Load order history from localStorage
@@ -57,6 +61,11 @@ const Orders = () => {
   const updateCartAndNotify = (updatedCart: CartItem[]) => {
     setCartItems(updatedCart);
     localStorage.setItem('foodCart', JSON.stringify(updatedCart));
+    
+    // Update cart count
+    const itemCount = updatedCart.reduce((sum, item) => sum + item.quantity, 0);
+    setCartCount(itemCount);
+    
     // Dispatch custom event to notify other components about cart update
     window.dispatchEvent(new Event('cartUpdated'));
   };
@@ -109,6 +118,11 @@ const Orders = () => {
     setActiveTab("history");
   };
 
+  const navigateToOrders = () => {
+    // Since we're already on the orders page, this just refreshes the current view
+    setActiveTab("cart");
+  };
+
   // App Bar Component
   const AppBar = () => (
     <div className="bg-[#472D21] text-white p-4 flex justify-between items-center shadow-md sticky top-0 z-10">
@@ -117,6 +131,14 @@ const Orders = () => {
         <div className="flex items-center cursor-pointer">
           <MapPin className="w-5 h-5 mr-1" />
           <span>Trivandrum</span>
+        </div>
+        <div className="relative cursor-pointer" onClick={navigateToOrders}>
+          <ShoppingCart className="w-6 h-6" />
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              {cartCount > 99 ? '99+' : cartCount}
+            </span>
+          )}
         </div>
       </div>
     </div>
