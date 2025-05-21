@@ -1,3 +1,4 @@
+
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MapPin, Clock, Star, Info, Plus, Minus, ShoppingCart } from "lucide-react";
@@ -26,6 +27,12 @@ interface FoodItem {
   postedTime?: string;
   bestBefore?: string;
   ingredients?: string[];
+}
+
+// Define cart item interface
+interface CartItem extends FoodItem {
+  quantity: number;
+  addedAt: string;
 }
 
 const FoodItemDetails = () => {
@@ -149,9 +156,38 @@ const FoodItemDetails = () => {
   };
 
   const handleReserve = () => {
+    if (!item) return;
+    
+    // Get existing cart from localStorage
+    const existingCartJSON = localStorage.getItem('foodCart');
+    const existingCart: CartItem[] = existingCartJSON ? JSON.parse(existingCartJSON) : [];
+    
+    // Check if the item already exists in the cart
+    const existingItemIndex = existingCart.findIndex(cartItem => cartItem.id === item.id);
+    
+    let updatedCart: CartItem[];
+    
+    if (existingItemIndex >= 0) {
+      // Item exists, update quantity
+      updatedCart = [...existingCart];
+      updatedCart[existingItemIndex].quantity += quantity;
+      updatedCart[existingItemIndex].addedAt = new Date().toISOString();
+    } else {
+      // Item doesn't exist, add new item to cart
+      const newCartItem: CartItem = {
+        ...item,
+        quantity,
+        addedAt: new Date().toISOString()
+      };
+      updatedCart = [...existingCart, newCartItem];
+    }
+    
+    // Save updated cart to localStorage
+    localStorage.setItem('foodCart', JSON.stringify(updatedCart));
+    
     toast({
-      title: "Item reserved!",
-      description: `You've reserved ${quantity} ${quantity > 1 ? 'items' : 'item'} of ${item?.name}`,
+      title: "Item added to cart!",
+      description: `You've added ${quantity} ${quantity > 1 ? 'items' : 'item'} of ${item.name} to your cart`,
     });
   };
 
