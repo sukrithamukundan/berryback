@@ -13,8 +13,12 @@ import CategoryView from "@/components/CategoryView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BottomNavBar from "@/components/BottomNavBar";
 
-const Index = () => {
-  const [showSplash, setShowSplash] = useState(true);
+interface IndexProps {
+  skipSplash?: boolean;
+}
+
+const Index = ({ skipSplash = false }: IndexProps) => {
+  const [showSplash, setShowSplash] = useState(!skipSplash);
   const [role, setRole] = useState<"consumer" | "business" | null>(null);
   const [showPhonePreview, setShowPhonePreview] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,7 +39,7 @@ const Index = () => {
     checkLoginStatus();
   }, []);
 
-  if (showSplash) {
+  if (showSplash && !skipSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
