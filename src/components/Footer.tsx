@@ -6,7 +6,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
             <h3 className="font-bold text-lg">
-              <span className="text-[#472D21]">Waste-to-Table</span> Connect
+              <span className="text-[#472D21]">Berry</span> Back
             </h3>
             <p className="text-sm text-[#472D21]/70 mt-1">
               Fighting food waste, one meal at a time.
@@ -36,7 +36,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-[#472D21]/20 mt-8 pt-6 text-sm text-center text-[#472D21]/70">
-          © {new Date().getFullYear()} Waste-to-Table Connect. All rights reserved.
+          © {new Date().getFullYear()} Berry Back. All rights reserved.
         </div>
       </div>
     </footer>

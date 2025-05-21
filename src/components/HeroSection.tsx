@@ -13,7 +13,7 @@ const HeroSection = () => {
   return (
     <div className="text-center">
       <h1 className="text-4xl md:text-5xl font-bold mb-6">
-        <span className="text-[#472D21]">Waste-to-Table</span> Connect
+        <span className="text-[#472D21]">Berry</span> Back
       </h1>
       <p className="text-xl text-[#472D21] max-w-2xl mx-auto mb-8">
         Reducing food waste by connecting surplus food from restaurants and 

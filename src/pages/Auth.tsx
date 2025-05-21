@@ -45,7 +45,7 @@ const Auth = () => {
             </svg>
           </div>
           <h1 className="text-4xl font-bold text-[#472D21] mb-3">
-            Waste-to-Table
+            Berry Back
           </h1>
           <p className="text-lg text-[#472D21] px-6">
             Why wait in line when you can have your discounted food ready and waiting for you?
