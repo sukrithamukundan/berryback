@@ -1,17 +1,11 @@
 
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuCheckboxItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const FoodListings = () => {
   const [view, setView] = useState<"list" | "map">("list");
+  const navigate = useNavigate();
   
   const mockListings = [
     {
@@ -49,6 +43,10 @@ const FoodListings = () => {
     }
   ];
 
+  const handleCardClick = (id: number) => {
+    navigate(`/food/${id}`);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-end items-center mb-8">
@@ -77,7 +75,11 @@ const FoodListings = () => {
       {view === "list" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {mockListings.map((listing) => (
-            <div key={listing.id} className="border rounded-lg overflow-hidden shadow-sm">
+            <div 
+              key={listing.id} 
+              className="border rounded-lg overflow-hidden shadow-sm cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md"
+              onClick={() => handleCardClick(listing.id)}
+            >
               <div className="relative h-48 bg-gray-200">
                 <img 
                   src={listing.image} 
@@ -106,7 +108,15 @@ const FoodListings = () => {
                     {listing.distance} miles • {listing.timeLeft} left
                   </div>
                 </div>
-                <Button className="w-full mt-4 bg-[#472D21] hover:bg-[#5A392C]">Reserve</Button>
+                <Button 
+                  className="w-full mt-4 bg-[#472D21] hover:bg-[#5A392C]"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent card click when button is clicked
+                    // Handle reserve action
+                  }}
+                >
+                  Reserve
+                </Button>
               </div>
             </div>
           ))}

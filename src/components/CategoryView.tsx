@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { useNavigate } from "react-router-dom";
 
 interface CategoryViewProps {
   category: "restaurant" | "retailer" | "catering" | "confectionery";
@@ -115,6 +116,7 @@ const mockListingsByCategory = {
 };
 
 const CategoryView = ({ category }: CategoryViewProps) => {
+  const navigate = useNavigate();
   const [sortBy, setSortBy] = useState<"distance" | "price" | "discount">("distance");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterDistance, setFilterDistance] = useState<number[]>([5]); // max distance in miles
@@ -177,6 +179,10 @@ const CategoryView = ({ category }: CategoryViewProps) => {
 
   const toggleFilter = () => {
     setShowFilters(!showFilters);
+  };
+
+  const handleCardClick = (id: number) => {
+    navigate(`/food/${id}`);
   };
 
   return (
@@ -335,7 +341,11 @@ const CategoryView = ({ category }: CategoryViewProps) => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAndSortedListings.map((listing) => (
-            <Card key={listing.id} className="overflow-hidden">
+            <Card 
+              key={listing.id} 
+              className="overflow-hidden cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md"
+              onClick={() => handleCardClick(listing.id)}
+            >
               <div className="relative h-48 bg-gray-200">
                 <img 
                   src={listing.image} 
@@ -366,7 +376,15 @@ const CategoryView = ({ category }: CategoryViewProps) => {
                 </div>
               </CardContent>
               <CardFooter className="pt-0">
-                <Button className="w-full bg-[#472D21] hover:bg-[#5A392C]">Reserve</Button>
+                <Button 
+                  className="w-full bg-[#472D21] hover:bg-[#5A392C]"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent card click when button is clicked
+                    // Handle reserve action
+                  }}
+                >
+                  Reserve
+                </Button>
               </CardFooter>
             </Card>
           ))}
