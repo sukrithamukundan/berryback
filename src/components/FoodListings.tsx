@@ -1,9 +1,6 @@
 
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -12,17 +9,9 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Filter, SlidersHorizontal, ArrowDownAZ, ArrowUpAZ, Search } from "lucide-react";
 
 const FoodListings = () => {
   const [view, setView] = useState<"list" | "map">("list");
-  const [sortBy, setSortBy] = useState<"distance" | "price" | "discount">("distance");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [filterDistance, setFilterDistance] = useState<number[]>([5]); // max distance in miles
-  const [filterPrice, setFilterPrice] = useState<number[]>([0, 25]); // price range
-  const [filterTypes, setFilterTypes] = useState<{veg: boolean, nonVeg: boolean}>({ veg: true, nonVeg: true });
-  const [showFilters, setShowFilters] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   
   const mockListings = [
     {
@@ -60,53 +49,6 @@ const FoodListings = () => {
     }
   ];
 
-  // Apply filters, search and sorting
-  const filteredAndSortedListings = [...mockListings]
-    // Apply search filter
-    .filter(listing => {
-      if (searchQuery.trim() === "") return true;
-      const query = searchQuery.toLowerCase();
-      return listing.name.toLowerCase().includes(query) || 
-             listing.business.toLowerCase().includes(query);
-    })
-    // Apply filters
-    .filter(listing => {
-      // Distance filter
-      if (listing.distance > filterDistance[0]) return false;
-      
-      // Price filter
-      if (listing.discountedPrice < filterPrice[0] || listing.discountedPrice > filterPrice[1]) return false;
-      
-      // Food type filter
-      if (listing.type === "veg" && !filterTypes.veg) return false;
-      if (listing.type === "nonVeg" && !filterTypes.nonVeg) return false;
-      
-      return true;
-    })
-    // Apply sorting
-    .sort((a, b) => {
-      let comparison = 0;
-      if (sortBy === "distance") {
-        comparison = a.distance - b.distance;
-      } else if (sortBy === "price") {
-        comparison = a.discountedPrice - b.discountedPrice;
-      } else if (sortBy === "discount") {
-        const discountA = (a.originalPrice - a.discountedPrice) / a.originalPrice;
-        const discountB = (b.originalPrice - b.discountedPrice) / b.originalPrice;
-        comparison = discountB - discountA; // Higher discount first
-      }
-      
-      return sortOrder === "asc" ? comparison : -comparison;
-    });
-
-  const toggleSortOrder = () => {
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-  };
-
-  const toggleFilter = () => {
-    setShowFilters(!showFilters);
-  };
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-end items-center mb-8">
@@ -128,192 +70,46 @@ const FoodListings = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+      <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#472D21]">Available Surplus Food Near You</h1>
-        
-        <div className="flex items-center gap-3">
-          {/* Sort Dropdown */}
-          <Select value={sortBy} onValueChange={(value) => setSortBy(value as any)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="distance">Distance</SelectItem>
-              <SelectItem value="price">Price</SelectItem>
-              <SelectItem value="discount">Discount %</SelectItem>
-            </SelectContent>
-          </Select>
-          
-          {/* Sort Order Toggle */}
-          <Button 
-            variant="outline" 
-            size="icon" 
-            onClick={toggleSortOrder}
-            className="border-[#472D21] text-[#472D21]"
-          >
-            {sortOrder === "asc" ? <ArrowUpAZ /> : <ArrowDownAZ />}
-          </Button>
-          
-          {/* Filter Button */}
-          <Button 
-            variant="outline" 
-            size="icon" 
-            onClick={toggleFilter}
-            className={`border-[#472D21] text-[#472D21] ${showFilters ? 'bg-[#472D21]/10' : ''}`}
-          >
-            <Filter />
-          </Button>
-        </div>
       </div>
-
-      {/* Search Bar */}
-      <div className="mb-6 relative">
-        <div className="flex items-center border rounded-md focus-within:ring-2 focus-within:ring-[#472D21] bg-white">
-          <Search className="ml-3 h-5 w-5 text-[#472D21]" />
-          <Input
-            type="text"
-            placeholder="Search for food items or providers..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 border-0 focus-visible:ring-0 focus-visible:outline-none"
-          />
-          {searchQuery && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setSearchQuery("")}
-              className="mr-1 h-7 w-7 rounded-full p-0"
-            >
-              <span className="sr-only">Clear</span>
-              <span className="h-4 w-4 text-[#472D21]">×</span>
-            </Button>
-          )}
-        </div>
-      </div>
-
-      {/* Filter Section */}
-      {showFilters && (
-        <div className="mb-8 p-4 border rounded-md bg-white shadow-sm">
-          <h2 className="font-semibold mb-4 text-lg text-[#472D21]">Filters</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Distance Filter */}
-            <div>
-              <label className="block text-sm font-medium text-[#472D21] mb-2">
-                Max Distance: {filterDistance[0]} miles
-              </label>
-              <Slider
-                defaultValue={[5]}
-                max={10}
-                step={0.5}
-                value={filterDistance}
-                onValueChange={(value) => setFilterDistance(value)}
-                className="mb-2"
-              />
-              <div className="flex justify-between text-xs text-gray-500">
-                <span>0 miles</span>
-                <span>10 miles</span>
-              </div>
-            </div>
-            
-            {/* Price Range Filter */}
-            <div>
-              <label className="block text-sm font-medium text-[#472D21] mb-2">
-                Price Range: ${filterPrice[0]} - ${filterPrice[1]}
-              </label>
-              <Slider
-                defaultValue={[0, 25]}
-                min={0}
-                max={50}
-                step={1}
-                value={filterPrice}
-                onValueChange={(value) => setFilterPrice(value)}
-                className="mb-2"
-              />
-              <div className="flex justify-between text-xs text-gray-500">
-                <span>$0</span>
-                <span>$50</span>
-              </div>
-            </div>
-            
-            {/* Food Type Filter */}
-            <div>
-              <label className="block text-sm font-medium text-[#472D21] mb-2">Food Type</label>
-              <div className="flex gap-4">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={filterTypes.veg}
-                    onChange={() => setFilterTypes({...filterTypes, veg: !filterTypes.veg})}
-                    className="mr-2 rounded text-[#472D21]"
-                  />
-                  Vegetarian
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={filterTypes.nonVeg}
-                    onChange={() => setFilterTypes({...filterTypes, nonVeg: !filterTypes.nonVeg})}
-                    className="mr-2 rounded text-[#472D21]"
-                  />
-                  Non-Vegetarian
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {view === "list" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAndSortedListings.length === 0 ? (
-            <div className="col-span-full text-center py-12 bg-gray-50 rounded-lg">
-              <p className="text-muted-foreground">
-                {searchQuery ? `No results found for "${searchQuery}"` : "No results match your filters"}
-              </p>
-              <Button className="mt-4" onClick={() => {
-                setFilterDistance([5]);
-                setFilterPrice([0, 25]);
-                setFilterTypes({veg: true, nonVeg: true});
-                setSearchQuery("");
-              }}>Reset All</Button>
-            </div>
-          ) : (
-            filteredAndSortedListings.map((listing) => (
-              <div key={listing.id} className="border rounded-lg overflow-hidden shadow-sm">
-                <div className="relative h-48 bg-gray-200">
-                  <img 
-                    src={listing.image} 
-                    alt={listing.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-2 right-2 bg-green-600 text-white px-2 py-1 rounded-md text-sm font-medium">
-                    {Math.round(((listing.originalPrice - listing.discountedPrice) / listing.originalPrice) * 100)}% OFF
-                  </div>
-                  
-                  {/* Add veg/non-veg indicator */}
-                  <div className="absolute top-2 left-2 px-2 py-1 rounded-md text-xs font-bold text-white"
-                       style={{backgroundColor: listing.type === 'veg' ? '#00A300' : '#D62828'}}>
-                    {listing.type === 'veg' ? 'VEG' : 'NON-VEG'}
-                  </div>
+          {mockListings.map((listing) => (
+            <div key={listing.id} className="border rounded-lg overflow-hidden shadow-sm">
+              <div className="relative h-48 bg-gray-200">
+                <img 
+                  src={listing.image} 
+                  alt={listing.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-2 right-2 bg-green-600 text-white px-2 py-1 rounded-md text-sm font-medium">
+                  {Math.round(((listing.originalPrice - listing.discountedPrice) / listing.originalPrice) * 100)}% OFF
                 </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg">{listing.name}</h3>
-                  <p className="text-muted-foreground text-sm">{listing.business}</p>
-                  <div className="flex justify-between items-center mt-3">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-green-600 font-bold">${listing.discountedPrice}</span>
-                      <span className="text-muted-foreground text-sm line-through">${listing.originalPrice}</span>
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {listing.distance} miles • {listing.timeLeft} left
-                    </div>
-                  </div>
-                  <Button className="w-full mt-4 bg-[#472D21] hover:bg-[#5A392C]">Reserve</Button>
+                
+                {/* Add veg/non-veg indicator */}
+                <div className="absolute top-2 left-2 px-2 py-1 rounded-md text-xs font-bold text-white"
+                     style={{backgroundColor: listing.type === 'veg' ? '#00A300' : '#D62828'}}>
+                  {listing.type === 'veg' ? 'VEG' : 'NON-VEG'}
                 </div>
               </div>
-            ))
-          )}
+              <div className="p-4">
+                <h3 className="font-semibold text-lg">{listing.name}</h3>
+                <p className="text-muted-foreground text-sm">{listing.business}</p>
+                <div className="flex justify-between items-center mt-3">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-green-600 font-bold">${listing.discountedPrice}</span>
+                    <span className="text-muted-foreground text-sm line-through">${listing.originalPrice}</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {listing.distance} miles • {listing.timeLeft} left
+                  </div>
+                </div>
+                <Button className="w-full mt-4 bg-[#472D21] hover:bg-[#5A392C]">Reserve</Button>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div className="border rounded-lg p-6 h-96 flex items-center justify-center bg-gray-100">
