@@ -35,6 +35,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
         <div className="mb-8">
           <div className={`transition-all duration-700 ${animationStage >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="h-32 w-32 mx-auto mb-6">
+              {/* Berry logo - a circular "berry" with a smiling face */}
               <svg 
                 viewBox="0 0 100 100" 
                 fill="none" 

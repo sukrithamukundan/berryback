@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FoodListings from "@/components/FoodListings";
 import HeroSection from "@/components/HeroSection";
 import HowItWorks from "@/components/HowItWorks";
@@ -9,12 +9,27 @@ import SplashScreen from "@/components/SplashScreen";
 import PhonePreview from "@/components/PhonePreview";
 import { Smartphone, Monitor } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import CategoryView from "@/components/CategoryView";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [role, setRole] = useState<"consumer" | "business" | null>(null);
   const [showPhonePreview, setShowPhonePreview] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  // Simulate checking login status
+  useEffect(() => {
+    // For demo purposes, simulate logged in status
+    // In a real app, this would check a token or session
+    const checkLoginStatus = () => {
+      const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+      setIsLoggedIn(loggedIn);
+    };
+    
+    checkLoginStatus();
+  }, []);
 
   if (showSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
@@ -24,10 +39,16 @@ const Index = () => {
     setShowPhonePreview(!showPhonePreview);
   };
 
+  const handleLogin = () => {
+    // For demo only - in a real app this would be handled properly
+    localStorage.setItem("isLoggedIn", "true");
+    setIsLoggedIn(true);
+  };
+
   // Content to be rendered inside either the normal view or the phone preview
   const content = (
     <>
-      {!role ? (
+      {!role && !isLoggedIn ? (
         <div className="container mx-auto px-4 py-16 flex flex-col items-center">
           <HeroSection />
           <div className="mt-12 space-y-6 text-center">
@@ -36,7 +57,10 @@ const Index = () => {
               <Button 
                 size="lg" 
                 className="bg-[#472D21] hover:bg-[#5A392C] px-8 py-6 text-lg"
-                onClick={() => setRole("consumer")}
+                onClick={() => {
+                  setRole("consumer");
+                  handleLogin(); // Auto-login for demo
+                }}
               >
                 Consumer Looking for Deals
               </Button>
@@ -52,8 +76,41 @@ const Index = () => {
           </div>
           <HowItWorks />
         </div>
-      ) : role === "consumer" ? (
-        <FoodListings />
+      ) : isLoggedIn && role === "consumer" ? (
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold mb-4 text-[#472D21]">Browse Surplus Food</h1>
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList className="mb-6 w-full flex justify-between overflow-x-auto">
+                <TabsTrigger value="all">All Offers</TabsTrigger>
+                <TabsTrigger value="restaurants">Restaurants</TabsTrigger>
+                <TabsTrigger value="retailers">Retailers</TabsTrigger>
+                <TabsTrigger value="catering">Catering</TabsTrigger>
+                <TabsTrigger value="confectionery">Confectionery</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="all">
+                <FoodListings />
+              </TabsContent>
+              
+              <TabsContent value="restaurants">
+                <CategoryView category="restaurant" />
+              </TabsContent>
+              
+              <TabsContent value="retailers">
+                <CategoryView category="retailer" />
+              </TabsContent>
+              
+              <TabsContent value="catering">
+                <CategoryView category="catering" />
+              </TabsContent>
+              
+              <TabsContent value="confectionery">
+                <CategoryView category="confectionery" />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
       ) : (
         <div className="container mx-auto px-4 py-8">
           <Button 
