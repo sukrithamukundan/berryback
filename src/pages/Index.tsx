@@ -75,13 +75,6 @@ const Index = ({ skipSplash = false }: IndexProps) => {
       {!isLoggedIn ? (
         <div className="container mx-auto px-4 py-16 flex flex-col items-center">
           <HeroSection />
-          <Button 
-            size="lg" 
-            className="bg-[#472D21] hover:bg-[#5A392C] px-8 py-6 text-lg mt-8"
-            onClick={handleLogin}
-          >
-            Get Started
-          </Button>
           <HowItWorks />
         </div>
       ) : (
