@@ -251,7 +251,7 @@ const BusinessDashboard = () => {
       projectedUsage: 52,
       trend: "increase" as const,
       priority: "high" as const,
-      recommendation: "Increase order by 25% to meet projected demand."
+      recommendation: "Increase order quantity"
     },
     {
       name: "Vegetables",
@@ -259,7 +259,7 @@ const BusinessDashboard = () => {
       projectedUsage: 35,
       trend: "decrease" as const,
       priority: "medium" as const,
-      recommendation: "Slightly reduce order quantity by 5% to avoid waste."
+      recommendation: "Slightly reduce order quantity"
     },
     {
       name: "Fruits",
@@ -267,7 +267,7 @@ const BusinessDashboard = () => {
       projectedUsage: 28,
       trend: "stable" as const,
       priority: "low" as const,
-      recommendation: "Maintain current order quantities."
+      recommendation: "Maintain current order quantities"
     },
     {
       name: "Dairy",
@@ -275,7 +275,7 @@ const BusinessDashboard = () => {
       projectedUsage: 22,
       trend: "increase" as const,
       priority: "high" as const,
-      recommendation: "Increase order by 40% based on current waste patterns."
+      recommendation: "Increase order quantity"
     }
   ];
 

@@ -42,6 +42,18 @@ const IngredientRecommendation = ({ recommendations }: IngredientRecommendationP
     }
   };
 
+  // Get simplified recommendation based on trend
+  const getSimplifiedRecommendation = (trend: "increase" | "decrease" | "stable") => {
+    switch (trend) {
+      case "increase":
+        return "Increase order quantity";
+      case "decrease":
+        return "Slightly reduce order quantity";
+      case "stable":
+        return "Maintain current order quantities";
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -75,7 +87,7 @@ const IngredientRecommendation = ({ recommendations }: IngredientRecommendationP
                   </span>
                 </span>
               </div>
-              <p className="text-sm">{item.recommendation}</p>
+              <p className="text-sm">{getSimplifiedRecommendation(item.trend)}</p>
             </div>
           ))
         )}
