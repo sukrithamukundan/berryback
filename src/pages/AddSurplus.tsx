@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -21,7 +21,6 @@ const AddSurplus = () => {
   const [discountedPrice, setDiscountedPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
-  const [pickupTime, setPickupTime] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isFromMenu, setIsFromMenu] = useState(false);
@@ -30,7 +29,7 @@ const AddSurplus = () => {
     e.preventDefault();
     
     // Basic form validation
-    if (!name || !description || !originalPrice || !discountedPrice || !quantity || !expiryDate || !pickupTime || (!image && !imagePreview)) {
+    if (!name || !description || !originalPrice || !discountedPrice || !quantity || !expiryDate || (!image && !imagePreview)) {
       toast({
         title: "Error",
         description: "Please fill in all required fields.",
@@ -38,9 +37,6 @@ const AddSurplus = () => {
       });
       return;
     }
-    
-    // Here you would typically handle the form submission,
-    // such as sending the data to an API endpoint.
     
     toast({
       title: "Success",
@@ -70,7 +66,7 @@ const AddSurplus = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gray-100 pb-20">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-[#472D21] text-white p-4 flex items-center">
         <button 
@@ -82,125 +78,80 @@ const AddSurplus = () => {
         <h1 className="text-xl font-bold">Add Surplus Item</h1>
       </div>
       
-      {/* Content/Form will go here */}
-      <div className="container mx-auto px-4 py-4">
-        <Card className="p-6">
-          <h2 className="text-xl font-bold mb-4 text-[#472D21]">Add a new surplus food item</h2>
-          <p className="text-gray-500 mb-6">Fill in the details for the food item you want to list</p>
-          
+      <div className="container mx-auto px-4 py-4 pb-24">
+        <Card className="p-4 shadow-sm">
+          <h2 className="text-lg font-medium mb-4 text-[#472D21]">Select from your menu</h2>
           <MenuItemSelector onSelect={handleMenuItemSelect} />
           
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Item Name*
-              </label>
-              <Input
-                id="name"
-                placeholder="e.g. Vegetable Curry"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                Description*
-              </label>
-              <Textarea
-                id="description"
-                placeholder="Describe the food item"
-                className="min-h-[100px]"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
+          <form className="space-y-4 mt-6" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 gap-4">
               <div>
-                <label htmlFor="original-price" className="block text-sm font-medium text-gray-700 mb-1">
-                  Original Price (₹)*
-                </label>
                 <Input
-                  id="original-price"
-                  type="number"
-                  placeholder="0.00"
-                  step="0.01"
-                  value={originalPrice}
-                  onChange={(e) => setOriginalPrice(e.target.value)}
+                  id="name"
+                  placeholder="Item Name*"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
-              <div>
-                <label htmlFor="discounted-price" className="block text-sm font-medium text-gray-700 mb-1">
-                  Discounted Price (₹)*
-                </label>
-                <Input
-                  id="discounted-price"
-                  type="number"
-                  placeholder="0.00"
-                  step="0.01"
-                  value={discountedPrice}
-                  onChange={(e) => setDiscountedPrice(e.target.value)}
-                />
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">
-                  Quantity Available*
-                </label>
-                <Input
-                  id="quantity"
-                  type="number"
-                  placeholder="1"
-                  min="1"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="expiry-date" className="block text-sm font-medium text-gray-700 mb-1">
-                  Expiry Date*
-                </label>
-                <Input
-                  id="expiry-date"
-                  type="date"
-                  value={expiryDate}
-                  onChange={(e) => setExpiryDate(e.target.value)}
-                />
-              </div>
-            </div>
-            
-            <div>
-              <label htmlFor="pickup-time" className="block text-sm font-medium text-gray-700 mb-1">
-                Pickup Time*
-              </label>
-              <Input
-                id="pickup-time"
-                type="time"
-                value={pickupTime}
-                onChange={(e) => setPickupTime(e.target.value)}
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Item Photo*
-              </label>
               
+              <div>
+                <Textarea
+                  id="description"
+                  placeholder="Description*"
+                  className="min-h-[80px]"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                id="original-price"
+                type="number"
+                placeholder="Original Price (₹)*"
+                step="0.01"
+                value={originalPrice}
+                onChange={(e) => setOriginalPrice(e.target.value)}
+              />
+              
+              <Input
+                id="discounted-price"
+                type="number"
+                placeholder="Discounted Price (₹)*"
+                step="0.01"
+                value={discountedPrice}
+                onChange={(e) => setDiscountedPrice(e.target.value)}
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                id="quantity"
+                type="number"
+                placeholder="Quantity Available*"
+                min="1"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+              />
+              
+              <Input
+                id="expiry-date"
+                type="date"
+                placeholder="Expiry Date*"
+                value={expiryDate}
+                onChange={(e) => setExpiryDate(e.target.value)}
+              />
+            </div>
+            
+            <div>
               {imagePreview && (
-                <div className="mb-4">
+                <div className="mb-3">
                   <img 
                     src={imagePreview} 
                     alt="Preview" 
-                    className="w-full h-48 object-cover rounded-md border border-gray-200"
+                    className="w-full h-40 object-cover rounded border border-gray-200"
                   />
-                  {isFromMenu && (
-                    <p className="text-xs text-gray-500 mt-1">
-                      This image was automatically selected from your menu. You can upload a new one if needed.
-                    </p>
-                  )}
                 </div>
               )}
               
@@ -212,17 +163,16 @@ const AddSurplus = () => {
                 onChange={handleImageUpload}
               />
               <label htmlFor="image-upload" className="cursor-pointer">
-                <div className="border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center">
-                  <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-500">Click to upload or drag and drop</p>
-                  <p className="text-xs text-gray-400 mt-1">PNG, JPG up to 5MB</p>
+                <div className="border border-dashed border-gray-300 rounded p-4 flex flex-col items-center justify-center">
+                  <Upload className="h-6 w-6 text-gray-400 mb-1" />
+                  <p className="text-sm text-gray-500">Upload Photo*</p>
                 </div>
               </label>
             </div>
             
             <Button 
               type="submit"
-              className="w-full bg-[#472D21] hover:bg-[#5A392C] py-6 text-white text-lg"
+              className="w-full bg-[#472D21] hover:bg-[#5A392C] py-5 text-white"
             >
               Add Item
             </Button>
