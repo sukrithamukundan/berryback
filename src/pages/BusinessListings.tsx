@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { ArrowLeft, Edit, Plus, Loader2 } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/toast";
 
 interface SurplusItem {
   id: string;
@@ -32,6 +33,7 @@ const BusinessListings = () => {
   useEffect(() => {
     // Check if this is a new registration
     const isNewReg = sessionStorage.getItem("newRegistration") === "true";
+    const businessName = localStorage.getItem("businessName") || "Your Business";
     
     if (isNewReg) {
       setIsNewRegistration(true);
@@ -39,7 +41,7 @@ const BusinessListings = () => {
       
       // Show welcome toast
       toast({
-        title: "Welcome to BerryBack!",
+        title: `Welcome to BerryBack, ${businessName}!`,
         description: "Your business is now registered. Start adding surplus food items to reduce waste and earn more.",
       });
     }
