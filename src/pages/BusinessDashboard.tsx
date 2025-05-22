@@ -441,7 +441,15 @@ const BusinessDashboard = () => {
             </div>
           </Card>
           
-          {/* Emissions Reduction Chart - Modified to remove bar chart */}
+          {/* Ingredient Purchase Recommendations */}
+          <Card className="p-4">
+            <h3 className="text-lg font-semibold text-[#472D21] mb-2">Ingredient Purchase Recommendations</h3>
+            <div>
+              <IngredientRecommendation recommendations={ingredientRecommendations} />
+            </div>
+          </Card>
+          
+          {/* Emissions Reduction Chart */}
           <Card className="p-4">
             <h3 className="text-lg font-semibold text-[#472D21] mb-2">Emissions Reduction Over Time</h3>
             <div className="h-[300px]">
@@ -450,14 +458,6 @@ const BusinessDashboard = () => {
                 timeFrame={emissionsTimeFrame}
                 onTimeFrameChange={handleEmissionsTimeFrameChange}
               />
-            </div>
-          </Card>
-          
-          {/* Ingredient Purchase Recommendations */}
-          <Card className="p-4">
-            <h3 className="text-lg font-semibold text-[#472D21] mb-2">Ingredient Purchase Recommendations</h3>
-            <div>
-              <IngredientRecommendation recommendations={ingredientRecommendations} />
             </div>
           </Card>
         </div>
