@@ -8,7 +8,14 @@ import { ChevronLeft, Edit, Building2, MapPin, Phone, Mail, TrendingUp, Award } 
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 import { useToast } from "@/hooks/use-toast";
 
-interface BusinessProfileProps {}
+interface BusinessData {
+  businessName?: string;
+  businessType?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  description?: string;
+}
 
 const BusinessProfile = () => {
   const navigate = useNavigate();
@@ -16,20 +23,20 @@ const BusinessProfile = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Mock business data
-  const businessData = {
-    name: "Fresh Harvest Café",
-    type: "Organic Restaurant",
+  const [businessData, setBusinessData] = useState<BusinessData>({
+    businessName: "Fresh Harvest Café",
+    businessType: "Organic Restaurant",
     address: "123 Green St, Trivandrum",
     phone: "+91 98765 43210",
     email: "contact@freshharvest.com",
-    impact: {
-      itemsRescued: 478,
-      happyCustomers: 215,
-      co2Saved: 1250,
-      wasteReduced: 320
-    }
+  });
+
+  // Impact statistics
+  const impactStats = {
+    itemsRescued: 478,
+    happyCustomers: 215,
+    co2Saved: 1250,
+    wasteReduced: 320
   };
 
   useEffect(() => {
@@ -43,6 +50,24 @@ const BusinessProfile = () => {
     // If not logged in or not a business user, redirect to auth
     if (!loggedIn || type !== "business") {
       navigate("/auth");
+    }
+    
+    // Get business data from localStorage if it exists
+    const storedBusinessData = localStorage.getItem("businessData");
+    if (storedBusinessData) {
+      try {
+        const parsedData = JSON.parse(storedBusinessData);
+        setBusinessData({
+          businessName: parsedData.businessName || businessData.businessName,
+          businessType: parsedData.businessType || businessData.businessType,
+          address: parsedData.address || businessData.address,
+          phone: parsedData.phone || businessData.phone,
+          email: parsedData.email || businessData.email,
+          description: parsedData.description
+        });
+      } catch (error) {
+        console.error("Error parsing business data:", error);
+      }
     }
     
     setIsLoading(false);
@@ -93,7 +118,7 @@ const BusinessProfile = () => {
         {/* Business Information */}
         <Card className="p-6 relative">
           <div className="flex justify-between items-start mb-2">
-            <h2 className="text-2xl font-bold text-[#472D21]">{businessData.name}</h2>
+            <h2 className="text-2xl font-bold text-[#472D21]">{businessData.businessName}</h2>
             <Button variant="ghost" size="icon" className="absolute top-4 right-4">
               <Edit className="h-5 w-5 text-gray-500" />
             </Button>
@@ -101,7 +126,7 @@ const BusinessProfile = () => {
           <div className="space-y-3 mt-4">
             <div className="flex items-center">
               <Building2 className="w-5 h-5 text-gray-500 mr-3" />
-              <p className="text-gray-600">{businessData.type}</p>
+              <p className="text-gray-600">{businessData.businessType}</p>
             </div>
             <div className="flex items-center">
               <MapPin className="w-5 h-5 text-gray-500 mr-3" />
@@ -115,6 +140,11 @@ const BusinessProfile = () => {
               <Mail className="w-5 h-5 text-gray-500 mr-3" />
               <p className="text-gray-600">{businessData.email}</p>
             </div>
+            {businessData.description && (
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <p className="text-gray-700">{businessData.description}</p>
+              </div>
+            )}
           </div>
         </Card>
 
@@ -124,12 +154,12 @@ const BusinessProfile = () => {
           <div className="grid grid-cols-2 gap-4">
             <Card className="p-6 text-center">
               <TrendingUp className="h-10 w-10 text-green-500 mx-auto mb-2" />
-              <div className="text-4xl font-bold text-[#472D21]">{businessData.impact.itemsRescued}</div>
+              <div className="text-4xl font-bold text-[#472D21]">{impactStats.itemsRescued}</div>
               <p className="text-gray-600">Items Rescued</p>
             </Card>
             <Card className="p-6 text-center">
               <Award className="h-10 w-10 text-blue-500 mx-auto mb-2" />
-              <div className="text-4xl font-bold text-[#472D21]">{businessData.impact.happyCustomers}</div>
+              <div className="text-4xl font-bold text-[#472D21]">{impactStats.happyCustomers}</div>
               <p className="text-gray-600">Happy Customers</p>
             </Card>
           </div>
@@ -144,7 +174,7 @@ const BusinessProfile = () => {
             <div>
               <div className="flex justify-between mb-2">
                 <span className="text-gray-600">CO<sub>2</sub> Emissions Saved</span>
-                <span className="font-bold">{businessData.impact.co2Saved} kg</span>
+                <span className="font-bold">{impactStats.co2Saved} kg</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div className="bg-[#472D21] h-2.5 rounded-full" style={{ width: "75%" }}></div>
@@ -154,7 +184,7 @@ const BusinessProfile = () => {
             <div>
               <div className="flex justify-between mb-2">
                 <span className="text-gray-600">Food Waste Reduced</span>
-                <span className="font-bold">{businessData.impact.wasteReduced} kg</span>
+                <span className="font-bold">{impactStats.wasteReduced} kg</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div className="bg-[#472D21] h-2.5 rounded-full" style={{ width: "65%" }}></div>

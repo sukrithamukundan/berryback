@@ -6,12 +6,29 @@ import { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { ChevronLeft, Building2, Mail, Phone, MapPin } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [userType, setUserType] = useState<"consumer" | "business">("consumer");
+  const [showRegistration, setShowRegistration] = useState(false);
   
+  const businessForm = useForm({
+    defaultValues: {
+      businessName: "",
+      businessType: "",
+      email: "",
+      phone: "",
+      address: "",
+      description: ""
+    }
+  });
+
   const handleSignIn = () => {
     // For demo purposes, set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
@@ -30,9 +47,16 @@ const Auth = () => {
   };
   
   const handleRegisterBusiness = () => {
+    setShowRegistration(true);
+  };
+
+  const handleRegistrationSubmit = (data: any) => {
     // For demo purposes, set the user as logged in as a business
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userType", "business");
+    
+    // Store business data for future use
+    localStorage.setItem("businessData", JSON.stringify(data));
     
     toast({
       title: "Business registered!",
@@ -41,6 +65,115 @@ const Auth = () => {
     
     navigate('/business-dashboard');
   };
+
+  if (showRegistration) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col px-4 py-6">
+        <button 
+          className="flex items-center text-[#472D21] mb-6" 
+          onClick={() => setShowRegistration(false)}
+        >
+          <ChevronLeft className="h-5 w-5 mr-1" />
+          Back
+        </button>
+        
+        <div className="max-w-lg mx-auto w-full">
+          <h1 className="text-3xl font-bold text-[#472D21] mb-2">Register Your Business</h1>
+          <p className="text-gray-600 mb-6">Join Berry Back and reduce food waste while connecting with new customers.</p>
+          
+          <Form {...businessForm}>
+            <form onSubmit={businessForm.handleSubmit(handleRegistrationSubmit)} className="space-y-5">
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="businessName" className="text-[#472D21]">Business Name</Label>
+                    <div className="relative">
+                      <Input
+                        id="businessName"
+                        placeholder="e.g., Fresh Harvest Café"
+                        {...businessForm.register("businessName", { required: true })}
+                        className="pl-10 border-[#472D21]/30 focus:border-[#472D21]"
+                      />
+                      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="businessType" className="text-[#472D21]">Business Type</Label>
+                    <Input
+                      id="businessType"
+                      placeholder="e.g., Restaurant, Bakery, Grocery"
+                      {...businessForm.register("businessType", { required: true })}
+                      className="border-[#472D21]/30 focus:border-[#472D21]"
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-[#472D21]">Email Address</Label>
+                    <div className="relative">
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="your@email.com"
+                        {...businessForm.register("email", { required: true })}
+                        className="pl-10 border-[#472D21]/30 focus:border-[#472D21]"
+                      />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-[#472D21]">Phone Number</Label>
+                    <div className="relative">
+                      <Input
+                        id="phone"
+                        placeholder="+1 (555) 123-4567"
+                        {...businessForm.register("phone", { required: true })}
+                        className="pl-10 border-[#472D21]/30 focus:border-[#472D21]"
+                      />
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="address" className="text-[#472D21]">Business Address</Label>
+                  <div className="relative">
+                    <Input
+                      id="address"
+                      placeholder="123 Main St, City, Country"
+                      {...businessForm.register("address", { required: true })}
+                      className="pl-10 border-[#472D21]/30 focus:border-[#472D21]"
+                    />
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="description" className="text-[#472D21]">Business Description</Label>
+                  <Textarea
+                    id="description"
+                    placeholder="Tell us about your business and the type of food items you typically sell..."
+                    {...businessForm.register("description")}
+                    className="min-h-[100px] border-[#472D21]/30 focus:border-[#472D21]"
+                  />
+                </div>
+              </div>
+              
+              <Button 
+                type="submit"
+                className="bg-[#472D21] hover:bg-[#5A392C] w-full text-white py-6 text-lg mt-4"
+              >
+                Complete Registration
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
