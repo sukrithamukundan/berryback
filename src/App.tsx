@@ -17,6 +17,7 @@ import ManageSurplus from "./pages/ManageSurplus";
 import BusinessOrders from "./pages/BusinessOrders";
 import BusinessProfile from "./pages/BusinessProfile";
 import BusinessListings from "./pages/BusinessListings";
+import RegisterCompany from "./pages/RegisterCompany";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,11 @@ const App = () => {
               isLoggedIn ? 
                 (userType === "business" ? <Navigate to="/business-listings" replace /> : <Navigate to="/" replace />) : 
                 <Auth />
+            } />
+            <Route path="/register-company" element={
+              isLoggedIn && userType === "business" ? 
+                <Navigate to="/business-listings" replace /> : 
+                <RegisterCompany />
             } />
             <Route path="/orders" element={<Orders />} />
             <Route path="/profile" element={<Profile />} />
@@ -113,6 +119,3 @@ const App = () => {
       </TooltipProvider>
     </QueryClientProvider>
   );
-};
-
-export default App;

@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -155,7 +154,7 @@ const Auth = () => {
                   Sign in as Business
                 </Button>
                 <Button 
-                  onClick={handleCreateAccount}
+                  onClick={() => navigate('/register-company')}
                   variant="outline"
                   className="w-full border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 py-6 text-lg"
                 >
