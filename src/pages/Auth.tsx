@@ -12,10 +12,17 @@ const Auth = () => {
   const { toast } = useToast();
   const [userType, setUserType] = useState<"consumer" | "business">("consumer");
   
-  // Ensure we check login status on mount
+  // Ensure we check login status on mount and handle preselected role
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     const type = localStorage.getItem("userType") as "consumer" | "business" | null;
+    
+    // Check for preselected role from the Index page
+    const preselectedRole = localStorage.getItem("preselectedRole");
+    if (preselectedRole === "business") {
+      setUserType("business");
+      localStorage.removeItem("preselectedRole"); // Clear it after using
+    }
     
     if (loggedIn && type) {
       redirectBasedOnType(type);
@@ -95,7 +102,7 @@ const Auth = () => {
             Why wait in line when you can have your discounted food ready and waiting for you?
           </p>
           
-          <Tabs defaultValue="consumer" className="w-full">
+          <Tabs defaultValue={userType} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger 
                 value="consumer" 

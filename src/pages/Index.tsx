@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import FoodListings from "@/components/FoodListings";
@@ -42,11 +41,15 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
-  const handleLogin = () => {
-    // For demo purposes - in a real app this would be handled properly
-    localStorage.setItem("isLoggedIn", "true");
-    setIsLoggedIn(true);
-    setRole("consumer");
+  // Modified to navigate to auth page instead of auto-login
+  const handleConsumerSelect = () => {
+    navigate('/auth');
+  };
+
+  const handleBusinessSelect = () => {
+    navigate('/auth');
+    // Set the business tab as the default in Auth page
+    localStorage.setItem("preselectedRole", "business");
   };
 
   const navigateToOrders = () => {
@@ -86,10 +89,7 @@ const Index = ({ skipSplash = false }: IndexProps) => {
               <Button 
                 size="lg" 
                 className="bg-[#472D21] hover:bg-[#5A392C] px-8 py-6 text-lg"
-                onClick={() => {
-                  setRole("consumer");
-                  handleLogin(); // Auto-login for demo
-                }}
+                onClick={handleConsumerSelect}
               >
                 Consumer Looking for Deals
               </Button>
@@ -97,7 +97,7 @@ const Index = ({ skipSplash = false }: IndexProps) => {
                 size="lg" 
                 variant="outline" 
                 className="border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 px-8 py-6 text-lg"
-                onClick={() => setRole("business")}
+                onClick={handleBusinessSelect}
               >
                 Business with Surplus Food
               </Button>
