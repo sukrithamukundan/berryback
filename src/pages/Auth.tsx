@@ -23,6 +23,7 @@ const Auth = () => {
       description: "You've been successfully signed in.",
     });
     
+    // Explicitly route to the correct dashboard
     if (userType === "business") {
       navigate('/business-dashboard');
     } else {
@@ -40,6 +41,7 @@ const Auth = () => {
       description: "Your account has been successfully created.",
     });
     
+    // Explicitly route to the correct dashboard
     if (userType === "business") {
       navigate('/business-dashboard');
     } else {

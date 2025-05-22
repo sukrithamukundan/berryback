@@ -46,7 +46,11 @@ const App = () => {
                 <Navigate to="/business-dashboard" /> : 
                 <Index skipSplash={true} />
             } />
-            <Route path="/auth" element={<Auth />} />
+            <Route path="/auth" element={
+              isLoggedIn ? 
+                (userType === "business" ? <Navigate to="/business-dashboard" /> : <Navigate to="/" />) : 
+                <Auth />
+            } />
             <Route path="/orders" element={<Orders />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/food/:id" element={<FoodItemDetails />} />
