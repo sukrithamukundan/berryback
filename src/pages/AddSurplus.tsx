@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ChevronLeft, Upload } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
+import MenuItemSelector from "@/components/MenuItemSelector";
+import { FoodMenuItem } from "@/models/FoodMenuItem";
 
 const AddSurplus = () => {
   const navigate = useNavigate();
@@ -20,12 +23,14 @@ const AddSurplus = () => {
   const [expiryDate, setExpiryDate] = useState("");
   const [pickupTime, setPickupTime] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isFromMenu, setIsFromMenu] = useState(false);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic form validation
-    if (!name || !description || !originalPrice || !discountedPrice || !quantity || !expiryDate || !pickupTime || !image) {
+    if (!name || !description || !originalPrice || !discountedPrice || !quantity || !expiryDate || !pickupTime || (!image && !imagePreview)) {
       toast({
         title: "Error",
         description: "Please fill in all required fields.",
@@ -50,7 +55,18 @@ const AddSurplus = () => {
     const file = e.target.files?.[0];
     if (file) {
       setImage(file);
+      setImagePreview(URL.createObjectURL(file));
     }
+  };
+  
+  const handleMenuItemSelect = (item: FoodMenuItem) => {
+    setName(item.name);
+    setDescription(item.description);
+    setOriginalPrice(item.originalPrice.toString());
+    // Set discounted price to 60% of original price as default
+    setDiscountedPrice((item.originalPrice * 0.6).toFixed(2));
+    setImagePreview(item.image);
+    setIsFromMenu(true);
   };
   
   return (
@@ -68,10 +84,11 @@ const AddSurplus = () => {
       
       {/* Content/Form will go here */}
       <div className="container mx-auto px-4 py-4">
-        {/* Form will go here - this is just a placeholder */}
         <Card className="p-6">
           <h2 className="text-xl font-bold mb-4 text-[#472D21]">Add a new surplus food item</h2>
           <p className="text-gray-500 mb-6">Fill in the details for the food item you want to list</p>
+          
+          <MenuItemSelector onSelect={handleMenuItemSelect} />
           
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
@@ -171,10 +188,27 @@ const AddSurplus = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Item Photo*
               </label>
+              
+              {imagePreview && (
+                <div className="mb-4">
+                  <img 
+                    src={imagePreview} 
+                    alt="Preview" 
+                    className="w-full h-48 object-cover rounded-md border border-gray-200"
+                  />
+                  {isFromMenu && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      This image was automatically selected from your menu. You can upload a new one if needed.
+                    </p>
+                  )}
+                </div>
+              )}
+              
               <input
                 type="file"
                 id="image-upload"
                 className="hidden"
+                accept="image/*"
                 onChange={handleImageUpload}
               />
               <label htmlFor="image-upload" className="cursor-pointer">
