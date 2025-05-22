@@ -31,7 +31,7 @@ const RevenueChart = ({ data }: RevenueChartProps) => {
       className="h-[300px] w-full"
     >
       <LineChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 20 }}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
         <XAxis 
           dataKey="time" 
           tickLine={false}
@@ -62,10 +62,10 @@ const RevenueChart = ({ data }: RevenueChartProps) => {
         <Line 
           type="monotone" 
           dataKey="amount" 
-          stroke="var(--color-revenue)" 
+          stroke="#472D21" 
           strokeWidth={2}
-          dot={{ strokeWidth: 2, r: 4 }}
-          activeDot={{ r: 6, strokeWidth: 0 }}
+          dot={{ strokeWidth: 2, r: 4, fill: "#472D21", stroke: "white" }}
+          activeDot={{ r: 6, strokeWidth: 0, fill: "#472D21" }}
         />
       </LineChart>
     </ChartContainer>

@@ -49,7 +49,7 @@ const SurplusOverTimeChart = ({
             value={timeFrame}
             onValueChange={(value: "week" | "month" | "year") => onTimeFrameChange(value)}
           >
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="w-[120px] border-[#472D21]/20">
               <SelectValue placeholder="Time frame" />
             </SelectTrigger>
             <SelectContent>
@@ -97,30 +97,30 @@ const SurplusOverTimeChart = ({
           <Line 
             type="monotone" 
             dataKey="amount" 
-            stroke="#3B82F6" 
+            stroke="#472D21" 
             strokeWidth={2.5} 
             dot={false}
-            activeDot={{ r: 6, fill: "#3B82F6", stroke: "white", strokeWidth: 2 }}
+            activeDot={{ r: 6, fill: "#472D21", stroke: "white", strokeWidth: 2 }}
             fill="url(#colorUv)"
           />
           <ReferenceDot
             x={peakDay.date}
             y={peakDay.amount}
             r={4}
-            fill="#3B82F6"
+            fill="#472D21"
             stroke="white"
           />
           <defs>
             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.2}/>
-              <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.05}/>
+              <stop offset="5%" stopColor="#472D21" stopOpacity={0.2}/>
+              <stop offset="95%" stopColor="#472D21" stopOpacity={0.05}/>
             </linearGradient>
           </defs>
         </LineChart>
       </ResponsiveContainer>
       
-      <div className="mt-2 bg-blue-100 p-2 rounded-md flex items-center">
-        <span className="text-blue-700 font-medium text-sm">
+      <div className="mt-2 bg-[#472D21]/10 p-2 rounded-md flex items-center">
+        <span className="text-[#472D21] font-medium text-sm">
           Peak surplus {timeFrame === "year" ? "in" : "on"} {getPeakDayName()} ({peakDay.amount} items)
         </span>
       </div>

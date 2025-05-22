@@ -6,7 +6,7 @@ interface IngredientWasteChartProps {
   variant?: "pie" | "donut";
 }
 
-const COLORS = ['#3B82F6', '#34D399', '#A7F3D0', '#60A5FA', '#818CF8'];
+const COLORS = ['#472D21', '#5A392C', '#8B6B61', '#A08880', '#D6CBC7'];
 
 const IngredientWasteChart = ({ data, variant = "pie" }: IngredientWasteChartProps) => {
   // Calculate inner radius based on variant
