@@ -119,7 +119,13 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     </>
   );
 
-  return <div className="min-h-screen bg-background">{content}</div>;
+  return (
+    <div className="min-h-screen bg-background">
+      {content}
+      
+      {!isLoggedIn && <Footer />}
+    </div>
+  );
 };
 
 export default Index;

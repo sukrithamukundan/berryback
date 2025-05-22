@@ -19,31 +19,6 @@ import ManageSurplus from "./pages/ManageSurplus";
 
 const queryClient = new QueryClient();
 
-// Standard mobile viewport width
-const MOBILE_WIDTH = 390;
-
-const MobileContainer = ({ children }: { children: React.ReactNode }) => {
-  // In development on larger screens, we'll constrain the width to mobile size
-  // In production or on actual mobile devices, we'll use the full screen width
-  const isProd = import.meta.env.PROD;
-  const isMobileDevice = typeof window !== 'undefined' && window.matchMedia("(max-width: 768px)").matches;
-  
-  if (isProd || isMobileDevice) {
-    return <>{children}</>;
-  }
-  
-  return (
-    <div className="flex justify-center bg-gray-100 min-h-screen">
-      <div 
-        className="w-full max-w-[390px] bg-white shadow-lg"
-        style={{ height: '100vh', overflowY: 'auto' }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-};
-
 const App = () => {
   // Check if user is logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -62,22 +37,20 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <MobileContainer>
-            <Routes>
-              <Route path="/" element={<Index skipSplash={true} />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/food/:id" element={<FoodItemDetails />} />
-              <Route path="/business-dashboard" element={<BusinessDashboard />} />
-              <Route path="/add-surplus" element={<AddSurplus />} />
-              <Route path="/business-profile" element={<BusinessProfile />} />
-              <Route path="/business-orders" element={<BusinessOrders />} />
-              <Route path="/manage-surplus" element={<ManageSurplus />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </MobileContainer>
+          <Routes>
+            <Route path="/" element={<Index skipSplash={true} />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/food/:id" element={<FoodItemDetails />} />
+            <Route path="/business-dashboard" element={<BusinessDashboard />} />
+            <Route path="/add-surplus" element={<AddSurplus />} />
+            <Route path="/business-profile" element={<BusinessProfile />} />
+            <Route path="/business-orders" element={<BusinessOrders />} />
+            <Route path="/manage-surplus" element={<ManageSurplus />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
