@@ -51,6 +51,7 @@ const App = () => {
             <Route path="/business-dashboard" element={<BusinessDashboard />} />
             <Route path="/add-surplus" element={<AddSurplus />} />
             <Route path="/manage-surplus" element={<ManageSurplus />} />
+            <Route path="/edit-surplus/:id" element={<AddSurplus />} />
             <Route path="/business-orders" element={<BusinessOrders />} />
             <Route path="/business-profile" element={<BusinessProfile />} />
             

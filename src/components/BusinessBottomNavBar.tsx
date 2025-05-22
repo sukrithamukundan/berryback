@@ -6,6 +6,9 @@ const BusinessBottomNavBar = () => {
   const location = useLocation();
   
   const isActive = (path: string) => {
+    if (path === '/manage-surplus') {
+      return location.pathname === path || location.pathname.startsWith('/edit-surplus');
+    }
     return location.pathname === path;
   };
   
