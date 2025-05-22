@@ -1,16 +1,6 @@
 
 import { useState } from "react";
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  ReferenceDot,
-  Legend 
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceDot } from "recharts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface SurplusOverTimeChartProps {
@@ -24,9 +14,6 @@ const SurplusOverTimeChart = ({
   timeFrame = "week",
   onTimeFrameChange
 }: SurplusOverTimeChartProps) => {
-  // State to toggle forecast visibility
-  const [showForecast, setShowForecast] = useState(true);
-  
   // Find peak day (highest amount)
   const peakDay = data.reduce((max, current) => 
     current.amount > max.amount ? current : max, data[0]);
@@ -53,82 +40,11 @@ const SurplusOverTimeChart = ({
       return peakDay.date;
     }
   };
-
-  // Generate forecast data based on historical data
-  const generateForecastData = () => {
-    if (!data || data.length === 0) return [];
-    
-    // Calculate average trend (simple linear regression approach)
-    let sum = 0;
-    const recentData = timeFrame === "week" ? data.slice(-3) : 
-                        timeFrame === "month" ? data.slice(-7) : 
-                        data.slice(-4);
-                        
-    for (let i = 1; i < recentData.length; i++) {
-      sum += recentData[i].amount - recentData[i-1].amount;
-    }
-    
-    const avgChange = sum / (recentData.length - 1) || 0;
-    const lastValue = data[data.length - 1].amount;
-    
-    // Generate forecast points
-    const forecastPoints = [];
-    const forecastCount = timeFrame === "week" ? 3 : 
-                          timeFrame === "month" ? 7 : 
-                          4;
-    
-    // Create date extensions based on timeframe
-    const getNextDate = (lastDate: string, index: number) => {
-      if (timeFrame === "year") {
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const lastMonth = lastDate.split(" ")[0];
-        const lastYear = parseInt(lastDate.split(" ")[1]);
-        
-        let monthIndex = months.indexOf(lastMonth);
-        let year = lastYear;
-        
-        for (let i = 0; i <= index; i++) {
-          monthIndex++;
-          if (monthIndex >= 12) {
-            monthIndex = 0;
-            year++;
-          }
-        }
-        
-        return `${months[monthIndex]} ${year}`;
-      } else {
-        // For week and month views
-        const dateParts = lastDate.split(" ");
-        const month = dateParts[0];
-        let day = parseInt(dateParts[1]);
-        day = day + index + 1;
-        return `${month} ${day}`;
-      }
-    };
-    
-    for (let i = 0; i < forecastCount; i++) {
-      const projectedValue = Math.max(0, lastValue + avgChange * (i + 1));
-      const nextDate = getNextDate(data[data.length - 1].date, i);
-      
-      forecastPoints.push({
-        date: nextDate,
-        forecast: parseFloat(projectedValue.toFixed(1))
-      });
-    }
-    
-    // Combine historical data with forecast
-    return data.map(item => ({ 
-      ...item
-    })).concat(forecastPoints);
-  };
-  
-  // Combined data with forecast
-  const combinedData = showForecast ? generateForecastData() : data;
   
   return (
     <div className="w-full h-full">
-      <div className="mb-4 flex justify-between items-center">
-        {onTimeFrameChange && (
+      {onTimeFrameChange && (
+        <div className="mb-4 flex justify-end">
           <Select
             value={timeFrame}
             onValueChange={(value: "week" | "month" | "year") => onTimeFrameChange(value)}
@@ -142,22 +58,12 @@ const SurplusOverTimeChart = ({
               <SelectItem value="year">Year</SelectItem>
             </SelectContent>
           </Select>
-        )}
-        
-        <div className="flex items-center">
-          <label className="text-sm text-gray-600 mr-2">Show forecast</label>
-          <input 
-            type="checkbox" 
-            checked={showForecast} 
-            onChange={() => setShowForecast(!showForecast)} 
-            className="form-checkbox h-4 w-4 text-[#472D21] rounded border-gray-300 focus:ring-[#472D21]"
-          />
         </div>
-      </div>
+      )}
       
-      <ResponsiveContainer width="100%" height={onTimeFrameChange ? "88%" : "100%"}>
+      <ResponsiveContainer width="100%" height={onTimeFrameChange ? "90%" : "100%"}>
         <LineChart
-          data={combinedData}
+          data={data}
           margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
         >
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
@@ -185,17 +91,8 @@ const SurplusOverTimeChart = ({
           />
           <Tooltip
             contentStyle={{ background: "white", borderRadius: "8px", border: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}
-            formatter={(value, name) => {
-              const formattedName = name === "amount" ? "Actual" : "Forecast";
-              return [value ? `${value} items` : "N/A", formattedName];
-            }}
+            formatter={(value) => [`${value} items`, "Surplus"]}
             labelFormatter={(label) => `Date: ${label}`}
-          />
-          <Legend 
-            verticalAlign="top"
-            align="right"
-            iconType="circle"
-            wrapperStyle={{ fontSize: "12px", paddingBottom: "10px" }}
           />
           <Line 
             type="monotone" 
@@ -203,22 +100,9 @@ const SurplusOverTimeChart = ({
             stroke="#472D21" 
             strokeWidth={2.5} 
             dot={false}
-            name="Actual"
             activeDot={{ r: 6, fill: "#472D21", stroke: "white", strokeWidth: 2 }}
             fill="url(#colorUv)"
           />
-          {showForecast && (
-            <Line 
-              type="monotone" 
-              dataKey="forecast" 
-              stroke="#472D21" 
-              strokeWidth={2} 
-              strokeDasharray="5 5"
-              dot={false}
-              name="Forecast"
-              activeDot={{ r: 5, fill: "#472D21", stroke: "white", strokeWidth: 2 }}
-            />
-          )}
           <ReferenceDot
             x={peakDay.date}
             y={peakDay.amount}
