@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import CategoryView from "@/components/CategoryView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BottomNavBar from "@/components/BottomNavBar";
+import PhonePreview from "@/components/PhonePreview";
 
 interface IndexProps {
   skipSplash?: boolean;
@@ -119,9 +120,18 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     </>
   );
 
+  // Determine if we should use the mobile container or not
+  const isMobileView = window.matchMedia("(max-width: 768px)").matches;
+
   return (
     <div className="min-h-screen bg-background">
-      {content}
+      {isMobileView ? (
+        content
+      ) : (
+        <div className="flex justify-center items-start py-4">
+          <PhonePreview>{content}</PhonePreview>
+        </div>
+      )}
       
       {!isLoggedIn && <Footer />}
     </div>

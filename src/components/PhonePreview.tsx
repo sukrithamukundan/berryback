@@ -8,7 +8,7 @@ interface PhonePreviewProps {
 
 const PhonePreview = ({ children }: PhonePreviewProps) => {
   return (
-    <div className="relative mx-auto my-8">
+    <div className="relative mx-auto my-4">
       {/* Phone frame */}
       <div className="relative mx-auto border-[8px] border-[#472D21] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl overflow-hidden bg-white">
         {/* Notch */}
