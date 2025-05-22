@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
-import { PlusCircle, ArrowRight, Package, Clock, X, ChartBarIcon, PieChart, LineChart, ArrowDown } from "lucide-react";
+import { PlusCircle, ArrowRight, Package, Clock, X, ChartBarIcon, PieChart, LineChart } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 import RevenueChart from "@/components/RevenueChart";
 import SurplusOverTimeChart from "@/components/SurplusOverTimeChart";
@@ -192,12 +192,6 @@ const BusinessDashboard = () => {
     { date: "Dec", amount: 29.9 },
   ];
   
-  // Monthly comparison data for emissions
-  const emissionsMonthlyComparison = [
-    { month: "March", amount: 45, percentage: 0 },
-    { month: "April", amount: 38, percentage: -15 },
-  ];
-
   // Get the appropriate surplus data based on selected time frame
   const getSurplusDataByTimeFrame = () => {
     switch (surplusTimeFrame) {
@@ -410,13 +404,12 @@ const BusinessDashboard = () => {
             </div>
           </Card>
           
-          {/* Emissions Reduction Chart - New Component */}
+          {/* Emissions Reduction Chart - Modified to remove bar chart */}
           <Card className="p-4">
             <h3 className="text-lg font-semibold text-[#472D21] mb-2">Emissions Reduction Over Time</h3>
-            <div className="h-[380px]">
+            <div className="h-[300px]">
               <EmissionsReductionChart 
                 dailyData={getEmissionsDataByTimeFrame()}
-                monthlyData={emissionsMonthlyComparison}
                 timeFrame={emissionsTimeFrame}
                 onTimeFrameChange={handleEmissionsTimeFrameChange}
               />
