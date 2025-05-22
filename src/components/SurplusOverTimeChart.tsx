@@ -98,7 +98,7 @@ const SurplusOverTimeChart = ({
       )}
       
       <div className="flex-grow">
-        <ResponsiveContainer width="100%" height="85%">
+        <ResponsiveContainer width="100%" height="80%">
           <LineChart
             data={data}
             margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
@@ -176,7 +176,7 @@ const SurplusOverTimeChart = ({
         </ResponsiveContainer>
       </div>
       
-      <div className="mt-2 space-y-2">
+      <div className="mt-4 space-y-2">
         <div className="bg-[#472D21]/10 p-2 rounded-md flex items-center">
           <span className="text-[#472D21] font-medium text-sm">
             Peak surplus {timeFrame === "year" ? "in" : "on"} {getPeakDayName()} ({peakDay.amount} items)
