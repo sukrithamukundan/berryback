@@ -22,10 +22,13 @@ const queryClient = new QueryClient();
 const App = () => {
   // Check if user is logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState<string | null>(null);
   
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const type = localStorage.getItem("userType");
     setIsLoggedIn(loggedIn);
+    setUserType(type);
   }, []);
 
   return (

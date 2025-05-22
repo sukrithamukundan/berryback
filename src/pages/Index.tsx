@@ -18,7 +18,6 @@ interface IndexProps {
 
 const Index = ({ skipSplash = false }: IndexProps) => {
   const [showSplash, setShowSplash] = useState(!skipSplash);
-  const [role, setRole] = useState<"consumer" | "business" | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cartItems, setCartItems] = useState(0);
   const navigate = useNavigate();
@@ -30,9 +29,6 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     const checkLoginStatus = () => {
       const loggedIn = localStorage.getItem("isLoggedIn") === "true";
       setIsLoggedIn(loggedIn);
-      if (loggedIn) {
-        setRole("consumer"); // Auto-set to consumer when logged in
-      }
     };
     
     checkLoginStatus();
@@ -46,7 +42,6 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     // For demo purposes - in a real app this would be handled properly
     localStorage.setItem("isLoggedIn", "true");
     setIsLoggedIn(true);
-    setRole("consumer");
   };
 
   const navigateToOrders = () => {
@@ -74,39 +69,23 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     </div>
   );
 
-  // Content to be rendered
+  // Content to be rendered - We've removed the role selection screen and directly show consumer view
   const content = (
     <>
-      {!role && !isLoggedIn ? (
+      {!isLoggedIn ? (
         <div className="container mx-auto px-4 py-16 flex flex-col items-center">
           <HeroSection />
-          <div className="mt-12 space-y-6 text-center">
-            <h2 className="text-2xl font-bold text-[#472D21]">I am a...</h2>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-[#472D21] hover:bg-[#5A392C] px-8 py-6 text-lg"
-                onClick={() => {
-                  setRole("consumer");
-                  handleLogin(); // Auto-login for demo
-                }}
-              >
-                Consumer Looking for Deals
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 px-8 py-6 text-lg"
-                onClick={() => setRole("business")}
-              >
-                Business with Surplus Food
-              </Button>
-            </div>
-          </div>
+          <Button 
+            size="lg" 
+            className="bg-[#472D21] hover:bg-[#5A392C] px-8 py-6 text-lg mt-8"
+            onClick={handleLogin}
+          >
+            Get Started
+          </Button>
           <HowItWorks />
         </div>
-      ) : isLoggedIn && role === "consumer" ? (
-        <div className="pb-20"> {/* Added padding at bottom for the nav bar */}
+      ) : (
+        <div className="pb-20">
           <AppBar />
           <div className="container mx-auto px-4 py-4">
             <div className="mb-6">
@@ -139,41 +118,6 @@ const Index = ({ skipSplash = false }: IndexProps) => {
                   <CategoryView category="confectionery" />
                 </TabsContent>
               </Tabs>
-            </div>
-          </div>
-          <BottomNavBar />
-        </div>
-      ) : (
-        <div className="pb-20"> {/* Added padding at bottom for the nav bar */}
-          <AppBar />
-          <div className="container mx-auto px-4 py-4">
-            <Button 
-              variant="outline" 
-              onClick={() => setRole(null)} 
-              className="mb-6 border-[#472D21] text-[#472D21]"
-            >
-              Back
-            </Button>
-            <h1 className="text-2xl font-bold mb-6 text-[#472D21]">Business Dashboard</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="border border-[#472D21]/20 rounded-lg p-6 shadow-sm">
-                <h2 className="text-xl font-semibold mb-4 text-[#472D21]">List New Surplus</h2>
-                <p className="text-[#472D21]/70 mb-4">
-                  Add details about food items you currently have in surplus.
-                </p>
-                <Button className="bg-[#472D21] hover:bg-[#5A392C]">
-                  Add New Listing
-                </Button>
-              </div>
-              <div className="border border-[#472D21]/20 rounded-lg p-6 shadow-sm">
-                <h2 className="text-xl font-semibold mb-4 text-[#472D21]">Surplus Insights</h2>
-                <p className="text-[#472D21]/70 mb-4">
-                  View patterns and analytics about your food waste.
-                </p>
-                <Button className="bg-[#472D21] hover:bg-[#5A392C]">
-                  View Report
-                </Button>
-              </div>
             </div>
           </div>
           <BottomNavBar />
