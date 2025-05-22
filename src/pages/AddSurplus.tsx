@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { ChevronLeft, Camera, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, Camera, Plus, Trash2, Clock } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -18,6 +18,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Card } from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -37,6 +45,7 @@ const formSchema = z.object({
   }, {
     message: "Expiry date must be in the future",
   }),
+  pickupTime: z.string().min(1, "Pickup time is required"),
 });
 
 const AddSurplus = () => {
@@ -53,6 +62,7 @@ const AddSurplus = () => {
       discountedPrice: "",
       quantity: "",
       expiryDate: new Date().toISOString().split("T")[0],
+      pickupTime: "",
     },
   });
 
@@ -262,6 +272,27 @@ const AddSurplus = () => {
                     )}
                   />
                 </div>
+
+                {/* New Pickup Time Field */}
+                <FormField
+                  control={form.control}
+                  name="pickupTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Pickup Time</FormLabel>
+                      <div className="flex items-center">
+                        <FormControl>
+                          <Input 
+                            type="time"
+                            {...field} 
+                          />
+                        </FormControl>
+                        <Clock className="ml-2 text-gray-500" />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </Card>
             
