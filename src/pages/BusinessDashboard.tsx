@@ -278,9 +278,6 @@ const BusinessDashboard = () => {
                 onTimeFrameChange={handleSurplusTimeFrameChange}
               />
             </div>
-            <div className="mt-2 bg-blue-100 p-2 rounded-md flex items-center">
-              <span className="text-blue-700 font-medium text-sm">Peak surplus typically occurs on Mondays</span>
-            </div>
           </Card>
           
           {/* Ingredient waste charts - side by side on larger screens */}

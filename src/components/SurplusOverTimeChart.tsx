@@ -18,6 +18,29 @@ const SurplusOverTimeChart = ({
   const peakDay = data.reduce((max, current) => 
     current.amount > max.amount ? current : max, data[0]);
   
+  // Extract day of week from the date string for the peak day
+  const getPeakDayName = () => {
+    // For year view, just return the month name
+    if (timeFrame === "year") {
+      return peakDay.date;
+    }
+    
+    // For week and month views, try to get the day of week
+    try {
+      // Add a year to make the date parsing work (the data just has "Apr 1" format without year)
+      const dateParts = peakDay.date.split(" ");
+      if (dateParts.length > 1) {
+        const fullDate = `${dateParts[0]} ${dateParts[1]}, 2024`;
+        const date = new Date(fullDate);
+        return date.toLocaleDateString('en-US', { weekday: 'long' });
+      }
+      return peakDay.date;
+    } catch (error) {
+      // If date parsing fails, just return the original date string
+      return peakDay.date;
+    }
+  };
+  
   return (
     <div className="w-full h-full">
       {onTimeFrameChange && (
@@ -95,6 +118,12 @@ const SurplusOverTimeChart = ({
           </defs>
         </LineChart>
       </ResponsiveContainer>
+      
+      <div className="mt-2 bg-blue-100 p-2 rounded-md flex items-center">
+        <span className="text-blue-700 font-medium text-sm">
+          Peak surplus {timeFrame === "year" ? "in" : "on"} {getPeakDayName()} ({peakDay.amount} items)
+        </span>
+      </div>
     </div>
   );
 };
