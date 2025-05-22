@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -29,21 +29,17 @@ const Auth = () => {
     }
   };
   
-  const handleCreateAccount = () => {
-    // For demo purposes, set the user as logged in
+  const handleRegisterBusiness = () => {
+    // For demo purposes, set the user as logged in as a business
     localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userType", userType);
+    localStorage.setItem("userType", "business");
     
     toast({
-      title: "Account created!",
-      description: "Your account has been successfully created.",
+      title: "Business registered!",
+      description: "Your business account has been successfully created.",
     });
     
-    if (userType === "business") {
-      navigate('/business-dashboard');
-    } else {
-      navigate('/');
-    }
+    navigate('/business-dashboard');
   };
 
   return (
@@ -112,13 +108,15 @@ const Auth = () => {
           >
             Sign in
           </Button>
-          <Button 
-            onClick={handleCreateAccount}
-            variant="outline"
-            className="w-full border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 py-6 text-lg"
-          >
-            Create Account
-          </Button>
+          {userType === "business" && (
+            <Button 
+              onClick={handleRegisterBusiness}
+              variant="outline"
+              className="w-full border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 py-6 text-lg"
+            >
+              Register Business
+            </Button>
+          )}
         </div>
       </div>
     </div>
