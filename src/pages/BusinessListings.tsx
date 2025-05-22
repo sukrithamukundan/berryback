@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Edit, Plus, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import WelcomeMessage from "@/components/BusinessListings/WelcomeMessage";
+import SurplusItemsList from "@/components/BusinessListings/SurplusItemsList";
 
 interface SurplusItem {
   id: string;
@@ -25,8 +25,6 @@ const BusinessListings = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [isNewRegistration, setIsNewRegistration] = useState(false);
-  
-  // Mock data for business listings
   const [surplusItems, setSurplusItems] = useState<SurplusItem[]>([]);
 
   useEffect(() => {
@@ -123,81 +121,11 @@ const BusinessListings = () => {
       </div>
 
       <div className="p-4">
-        {isNewRegistration && (
-          <div className="mb-4 p-4 bg-[#472D21]/10 rounded-lg">
-            <h3 className="text-lg font-semibold text-[#472D21]">Welcome to BerryBack!</h3>
-            <p className="text-sm text-gray-700 mb-3">
-              Your business is now registered. Start adding surplus food items to reduce waste and earn more.
-            </p>
-            <Button 
-              className="bg-[#472D21] hover:bg-[#5A392C] w-full"
-              onClick={() => navigate('/add-surplus')}
-            >
-              Add Your First Item
-            </Button>
-          </div>
-        )}
+        {isNewRegistration && <WelcomeMessage />}
       
         <h2 className="text-xl font-semibold mb-4 text-[#472D21]">Active Listings</h2>
         
-        {loading ? (
-          <div className="flex justify-center items-center p-12">
-            <Loader2 className="h-8 w-8 text-[#472D21] animate-spin" />
-          </div>
-        ) : surplusItems.length > 0 ? (
-          <div className="space-y-4">
-            {surplusItems.map((item) => (
-              <Card key={item.id} className="overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="flex">
-                    <div className="w-1/3">
-                      <img 
-                        src={item.image} 
-                        alt={item.name} 
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <div className="p-3 w-2/3">
-                      <div className="flex justify-between items-start">
-                        <h3 className="font-semibold">{item.name}</h3>
-                        <Badge className="bg-green-500">Active</Badge>
-                      </div>
-                      <p className="text-sm text-gray-500 my-1 line-clamp-2">{item.description}</p>
-                      <div className="flex justify-between items-center mb-1">
-                        <div>
-                          <span className="text-sm text-gray-500 line-through">${item.originalPrice.toFixed(2)}</span>
-                          <span className="text-lg font-bold text-[#472D21] ml-2">${item.discountedPrice.toFixed(2)}</span>
-                        </div>
-                        <span className="text-sm bg-gray-100 px-2 py-1 rounded">Qty: {item.quantity}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-500">Expires: {new Date(item.expiryDate).toLocaleDateString()}</span>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="text-blue-500 p-1 h-auto" 
-                          onClick={() => navigate(`/edit-surplus/${item.id}`)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center p-6 bg-white rounded-lg shadow">
-            <p className="text-gray-500 mb-4">You don't have any active listings yet.</p>
-            <Button 
-              className="bg-[#472D21] hover:bg-[#5A392C]"
-              onClick={() => navigate('/add-surplus')}
-            >
-              Add New Item
-            </Button>
-          </div>
-        )}
+        <SurplusItemsList loading={loading} surplusItems={surplusItems} />
       </div>
 
       <BusinessBottomNavBar />
