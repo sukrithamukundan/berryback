@@ -78,7 +78,7 @@ const SurplusOverTimeChart = ({
   const recommendation = generateRecommendation();
   
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex flex-col">
       {onTimeFrameChange && (
         <div className="mb-4 flex justify-end">
           <Select
@@ -97,82 +97,84 @@ const SurplusOverTimeChart = ({
         </div>
       )}
       
-      <ResponsiveContainer width="100%" height={onTimeFrameChange ? "90%" : "100%"}>
-        <LineChart
-          data={data}
-          margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-          <XAxis 
-            dataKey="date" 
-            axisLine={false}
-            tickLine={false}
-            tick={{ fontSize: 12 }}
-            tickFormatter={(value) => {
-              // Shorten date labels based on timeFrame
-              if (timeFrame === "week" || timeFrame === "month") {
-                return value.replace("Apr ", "");
-              } else {
-                // For year view, show only month
-                const dateParts = value.split(" ");
-                return dateParts[0];
-              }
-            }}
-          />
-          <YAxis 
-            axisLine={false}
-            tickLine={false}
-            tick={{ fontSize: 12 }}
-            domain={[0, 'dataMax + 1']}
-          />
-          <Tooltip
-            contentStyle={{ background: "white", borderRadius: "8px", border: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}
-            formatter={(value) => [`${value} items`, "Surplus"]}
-            labelFormatter={(label) => `Date: ${label}`}
-          />
-          <Line 
-            type="monotone" 
-            dataKey="amount" 
-            stroke="#472D21" 
-            strokeWidth={2.5} 
-            dot={false}
-            activeDot={{ r: 6, fill: "#472D21", stroke: "white", strokeWidth: 2 }}
-            fill="url(#colorUv)"
-          />
-          {/* Peak day reference dot */}
-          <ReferenceDot
-            x={peakDay.date}
-            y={peakDay.amount}
-            r={4}
-            fill="#472D21"
-            stroke="white"
-          />
-          {/* Lowest day reference dot */}
-          <ReferenceDot
-            x={lowestDay.date}
-            y={lowestDay.amount}
-            r={4}
-            fill="#7CB9E8"
-            stroke="white"
-          />
-          {/* Add reference area for peak day */}
-          <ReferenceArea
-            x1={peakDay.date}
-            x2={peakDay.date}
-            y1={0}
-            y2={peakDay.amount}
-            fillOpacity={0.1}
-            fill="#472D21"
-            stroke="none"
-          />
-          <defs>
-            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#472D21" stopOpacity={0.2}/>
-              <stop offset="95%" stopColor="#472D21" stopOpacity={0.05}/>
-            </linearGradient>
-          </defs>
-        </LineChart>
-      </ResponsiveContainer>
+      <div className="flex-grow">
+        <ResponsiveContainer width="100%" height="85%">
+          <LineChart
+            data={data}
+            margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+            <XAxis 
+              dataKey="date" 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 12 }}
+              tickFormatter={(value) => {
+                // Shorten date labels based on timeFrame
+                if (timeFrame === "week" || timeFrame === "month") {
+                  return value.replace("Apr ", "");
+                } else {
+                  // For year view, show only month
+                  const dateParts = value.split(" ");
+                  return dateParts[0];
+                }
+              }}
+            />
+            <YAxis 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 12 }}
+              domain={[0, 'dataMax + 1']}
+            />
+            <Tooltip
+              contentStyle={{ background: "white", borderRadius: "8px", border: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}
+              formatter={(value) => [`${value} items`, "Surplus"]}
+              labelFormatter={(label) => `Date: ${label}`}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="amount" 
+              stroke="#472D21" 
+              strokeWidth={2.5} 
+              dot={false}
+              activeDot={{ r: 6, fill: "#472D21", stroke: "white", strokeWidth: 2 }}
+              fill="url(#colorUv)"
+            />
+            {/* Peak day reference dot */}
+            <ReferenceDot
+              x={peakDay.date}
+              y={peakDay.amount}
+              r={4}
+              fill="#472D21"
+              stroke="white"
+            />
+            {/* Lowest day reference dot */}
+            <ReferenceDot
+              x={lowestDay.date}
+              y={lowestDay.amount}
+              r={4}
+              fill="#7CB9E8"
+              stroke="white"
+            />
+            {/* Add reference area for peak day */}
+            <ReferenceArea
+              x1={peakDay.date}
+              x2={peakDay.date}
+              y1={0}
+              y2={peakDay.amount}
+              fillOpacity={0.1}
+              fill="#472D21"
+              stroke="none"
+            />
+            <defs>
+              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#472D21" stopOpacity={0.2}/>
+                <stop offset="95%" stopColor="#472D21" stopOpacity={0.05}/>
+              </linearGradient>
+            </defs>
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
       
       <div className="mt-2 space-y-2">
         <div className="bg-[#472D21]/10 p-2 rounded-md flex items-center">
