@@ -79,9 +79,9 @@ const IngredientRecommendation = ({ recommendations }: IngredientRecommendationP
                   {getTrendIcon(item.trend)}
                   <span className="ml-1">
                     {item.trend === "increase" 
-                      ? `${Math.round((item.projectedUsage / item.currentUsage - 1) * 100)}% projected increase`
+                      ? "Projected increase"
                       : item.trend === "decrease"
-                        ? `${Math.round((1 - item.projectedUsage / item.currentUsage) * 100)}% projected decrease`
+                        ? "Projected decrease"
                         : "Stable usage"
                     }
                   </span>
