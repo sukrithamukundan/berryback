@@ -1,10 +1,9 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Check, X, ChevronLeft, Edit, Trash2, Plus } from "lucide-react";
+import { ChevronLeft, Edit, Trash2, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 
@@ -51,7 +50,7 @@ const ManageSurplus = () => {
         discountedPrice: 6.50,
         quantity: 3,
         expiryDate: "2025-05-24",
-        image: "https://picsum.photos/seed/vegetablecurry/300/300",
+        image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fHZlZ2V0YWJsZSUyMGN1cnJ5fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
         status: "Active"
       },
       {
@@ -62,7 +61,7 @@ const ManageSurplus = () => {
         discountedPrice: 1.99,
         quantity: 8,
         expiryDate: "2025-05-23",
-        image: "https://picsum.photos/seed/brownies/300/300",
+        image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGNob2NvbGF0ZSUyMGJyb3duaWVzfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
         status: "Active"
       },
       {
@@ -73,7 +72,7 @@ const ManageSurplus = () => {
         discountedPrice: 2.25,
         quantity: 0,
         expiryDate: "2025-05-23",
-        image: "https://picsum.photos/seed/baguette/300/300",
+        image: "https://images.unsplash.com/photo-1620174645265-15755e6f57a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGJhZ3VldHRlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
         status: "Sold Out"
       },
       {
@@ -84,7 +83,7 @@ const ManageSurplus = () => {
         discountedPrice: 3.99,
         quantity: 0,
         expiryDate: "2025-05-22",
-        image: "https://picsum.photos/seed/greensalad/300/300",
+        image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c2FsYWR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
         status: "Expired"
       }
     ];
@@ -154,14 +153,14 @@ const ManageSurplus = () => {
 
       <div className="container mx-auto px-4 py-4">
         <Tabs defaultValue="active" className="w-full">
-          <TabsList className="w-full grid grid-cols-3 mb-6">
-            <TabsTrigger value="active">
+          <TabsList className="w-full grid grid-cols-3 mb-6 bg-white rounded-lg p-1">
+            <TabsTrigger value="active" className="data-[state=active]:bg-white">
               Active ({activeItems.length})
             </TabsTrigger>
-            <TabsTrigger value="soldout">
+            <TabsTrigger value="soldout" className="data-[state=active]:bg-white">
               Sold Out ({soldOutItems.length})
             </TabsTrigger>
-            <TabsTrigger value="expired">
+            <TabsTrigger value="expired" className="data-[state=active]:bg-white">
               Expired ({expiredItems.length})
             </TabsTrigger>
           </TabsList>
@@ -169,7 +168,7 @@ const ManageSurplus = () => {
           <TabsContent value="active" className="space-y-4">
             {activeItems.length > 0 ? (
               activeItems.map((item) => (
-                <Card key={item.id} className="overflow-hidden">
+                <div key={item.id} className="bg-white rounded-lg overflow-hidden shadow-sm">
                   <div className="flex">
                     <div className="w-32 h-32 overflow-hidden flex-shrink-0">
                       <img 
@@ -181,7 +180,7 @@ const ManageSurplus = () => {
                     <div className="p-4 flex-1">
                       <div className="flex justify-between items-start mb-1">
                         <h3 className="font-semibold text-lg text-[#472D21]">{item.name}</h3>
-                        <Badge className="bg-green-500">Active</Badge>
+                        <Badge className="bg-green-500 font-normal text-xs">Active</Badge>
                       </div>
                       <p className="text-gray-600 mb-2 text-sm">{item.description}</p>
                       <div className="flex items-baseline mb-1">
@@ -218,17 +217,17 @@ const ManageSurplus = () => {
                       </div>
                     </div>
                   </div>
-                </Card>
+                </div>
               ))
             ) : (
               <div className="text-center py-10">
                 <p className="text-gray-500">No active items</p>
-                <Button 
+                <button 
                   onClick={handleAddNewItem}
-                  className="mt-4 bg-[#472D21] hover:bg-[#5A392C]"
+                  className="mt-4 px-4 py-2 bg-[#472D21] text-white rounded-md hover:bg-[#5A392C]"
                 >
                   Add New Item
-                </Button>
+                </button>
               </div>
             )}
           </TabsContent>
@@ -236,7 +235,7 @@ const ManageSurplus = () => {
           <TabsContent value="soldout" className="space-y-4">
             {soldOutItems.length > 0 ? (
               soldOutItems.map((item) => (
-                <Card key={item.id} className="overflow-hidden">
+                <div key={item.id} className="bg-white rounded-lg overflow-hidden shadow-sm">
                   <div className="flex">
                     <div className="w-32 h-32 overflow-hidden flex-shrink-0">
                       <img 
@@ -248,7 +247,7 @@ const ManageSurplus = () => {
                     <div className="p-4 flex-1">
                       <div className="flex justify-between items-start mb-1">
                         <h3 className="font-semibold text-lg text-[#472D21]">{item.name}</h3>
-                        <Badge className="bg-red-500">Sold Out</Badge>
+                        <Badge className="bg-red-500 font-normal text-xs">Sold Out</Badge>
                       </div>
                       <p className="text-gray-600 mb-2 text-sm">{item.description}</p>
                       <div className="flex items-baseline mb-1">
@@ -277,7 +276,7 @@ const ManageSurplus = () => {
                       </div>
                     </div>
                   </div>
-                </Card>
+                </div>
               ))
             ) : (
               <div className="text-center py-10">
@@ -289,7 +288,7 @@ const ManageSurplus = () => {
           <TabsContent value="expired" className="space-y-4">
             {expiredItems.length > 0 ? (
               expiredItems.map((item) => (
-                <Card key={item.id} className="overflow-hidden">
+                <div key={item.id} className="bg-white rounded-lg overflow-hidden shadow-sm">
                   <div className="flex">
                     <div className="w-32 h-32 overflow-hidden flex-shrink-0">
                       <img 
@@ -301,7 +300,7 @@ const ManageSurplus = () => {
                     <div className="p-4 flex-1">
                       <div className="flex justify-between items-start mb-1">
                         <h3 className="font-semibold text-lg text-[#472D21]">{item.name}</h3>
-                        <Badge className="bg-orange-500">Expired</Badge>
+                        <Badge className="bg-orange-500 font-normal text-xs">Expired</Badge>
                       </div>
                       <p className="text-gray-600 mb-2 text-sm">{item.description}</p>
                       <div className="flex items-baseline mb-1">
@@ -330,7 +329,7 @@ const ManageSurplus = () => {
                       </div>
                     </div>
                   </div>
-                </Card>
+                </div>
               ))
             ) : (
               <div className="text-center py-10">
