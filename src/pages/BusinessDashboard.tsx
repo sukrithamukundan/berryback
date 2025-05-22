@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,15 @@ import { Card } from "@/components/ui/card";
 import { PlusCircle, ArrowRight, Package, Clock } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 
-interface BusinessDashboardProps {}
+interface BusinessData {
+  businessName?: string;
+  businessType?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  description?: string;
+  location?: string;
+}
 
 const BusinessDashboard = () => {
   const navigate = useNavigate();
@@ -14,9 +23,11 @@ const BusinessDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [businessName, setBusinessName] = useState("Fresh Harvest Café");
-  const [businessLocation, setBusinessLocation] = useState("Trivandrum");
-  const [businessType, setBusinessType] = useState("Organic restaurant");
+  const [businessData, setBusinessData] = useState<BusinessData>({
+    businessName: "Fresh Harvest Café",
+    businessType: "Organic restaurant",
+    location: "Trivandrum"
+  });
 
   // Mock dashboard metrics
   const dashboardMetrics = {
@@ -39,10 +50,19 @@ const BusinessDashboard = () => {
       navigate("/auth");
     }
     
-    // Get business name if available
-    const storedBusinessName = localStorage.getItem("businessName");
-    if (storedBusinessName) {
-      setBusinessName(storedBusinessName);
+    // Get business data from localStorage if it exists
+    const storedBusinessData = localStorage.getItem("businessData");
+    if (storedBusinessData) {
+      try {
+        const parsedData = JSON.parse(storedBusinessData);
+        setBusinessData({
+          businessName: parsedData.businessName || businessData.businessName,
+          businessType: parsedData.businessType || businessData.businessType,
+          location: parsedData.address ? parsedData.address.split(',').pop()?.trim() : businessData.location
+        });
+      } catch (error) {
+        console.error("Error parsing business data:", error);
+      }
     }
 
     setTimeout(() => {
@@ -93,8 +113,8 @@ const BusinessDashboard = () => {
       <div className="container mx-auto px-4 py-6 space-y-6">
         {/* Business info card */}
         <Card className="p-6">
-          <h2 className="text-2xl font-bold text-[#472D21]">{businessName}</h2>
-          <p className="text-gray-600">{businessType} • {businessLocation}</p>
+          <h2 className="text-2xl font-bold text-[#472D21]">{businessData.businessName}</h2>
+          <p className="text-gray-600">{businessData.businessType} • {businessData.location}</p>
         </Card>
 
         {/* Dashboard metrics */}
