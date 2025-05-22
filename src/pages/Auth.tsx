@@ -1,75 +1,36 @@
 
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Lock, Mail, User } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [userType, setUserType] = useState<"consumer" | "business">("consumer");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  
-  // Ensure we check login status on mount
-  useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const type = localStorage.getItem("userType") as "consumer" | "business" | null;
-    
-    if (loggedIn && type) {
-      redirectBasedOnType(type);
-    }
-  }, []);
-  
-  const redirectBasedOnType = (type: string) => {
-    console.log("Redirecting based on type:", type);
-    if (type === "business") {
-      navigate('/business-listings', { replace: true });
-    } else {
-      navigate('/', { replace: true });
-    }
-  };
   
   const handleSignIn = () => {
     // For demo purposes, set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userType", userType);
-    
     toast({
       title: "Welcome back!",
       description: "You've been successfully signed in.",
     });
-    
-    // Redirect based on user type with a small delay to ensure localStorage is updated
-    setTimeout(() => {
-      redirectBasedOnType(userType);
-    }, 100);
+    navigate('/');
   };
   
   const handleCreateAccount = () => {
     // For demo purposes, set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userType", userType);
-    
     toast({
       title: "Account created!",
       description: "Your account has been successfully created.",
     });
-    
-    // Redirect based on user type with a small delay to ensure localStorage is updated
-    setTimeout(() => {
-      redirectBasedOnType(userType);
-    }, 100);
+    navigate('/');
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
+      <div className="max-w-xs w-full">
+        <div className="text-center mb-16">
           <div className="h-32 w-32 mx-auto mb-6">
             <svg 
               viewBox="0 0 100 100" 
@@ -99,92 +60,25 @@ const Auth = () => {
           <h1 className="text-4xl font-bold text-[#472D21] mb-3">
             Berry Back
           </h1>
-          <p className="text-lg text-[#472D21] px-6 mb-6">
+          <p className="text-lg text-[#472D21] px-6">
             Why wait in line when you can have your discounted food ready and waiting for you?
           </p>
-          
-          <Tabs defaultValue="consumer" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger 
-                value="consumer" 
-                onClick={() => setUserType("consumer")}
-              >
-                Customer
-              </TabsTrigger>
-              <TabsTrigger 
-                value="business" 
-                onClick={() => setUserType("business")}
-              >
-                Business
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="consumer">
-              <div className="space-y-4">
-                <Button 
-                  onClick={handleSignIn}
-                  className="bg-[#472D21] hover:bg-[#5A392C] w-full text-white py-6 text-lg"
-                >
-                  Sign in as Customer
-                </Button>
-                <Button 
-                  onClick={handleCreateAccount}
-                  variant="outline"
-                  className="w-full border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 py-6 text-lg"
-                >
-                  Create Customer Account
-                </Button>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="business">
-              <div className="space-y-4 mb-6">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      placeholder="your@email.com" 
-                      className="pl-10"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)} 
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                    <Input 
-                      id="password" 
-                      type="password" 
-                      placeholder="••••••••" 
-                      className="pl-10"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <Button 
-                  onClick={handleSignIn}
-                  className="bg-[#472D21] hover:bg-[#5A392C] w-full text-white py-6 text-lg"
-                >
-                  Sign in as Business
-                </Button>
-                <Button 
-                  onClick={() => navigate('/register-company')}
-                  variant="outline"
-                  className="w-full border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 py-6 text-lg"
-                >
-                  Register Business
-                </Button>
-              </div>
-            </TabsContent>
-          </Tabs>
+        </div>
+        
+        <div className="space-y-4">
+          <Button 
+            onClick={handleSignIn}
+            className="bg-[#472D21] hover:bg-[#5A392C] w-full text-white py-6 text-lg"
+          >
+            Sign in
+          </Button>
+          <Button 
+            onClick={handleCreateAccount}
+            variant="outline"
+            className="w-full border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 py-6 text-lg"
+          >
+            Create Account
+          </Button>
         </div>
       </div>
     </div>
