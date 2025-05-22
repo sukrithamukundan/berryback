@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
-import { PlusCircle, ArrowRight, Package, Clock, X, ChartBarIcon, PieChart, LineChart, ArrowDown } from "lucide-react";
+import { PlusCircle, ArrowRight, Package, Clock, X, ChartBarIcon, PieChart, LineChart } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 import RevenueChart from "@/components/RevenueChart";
 import SurplusOverTimeChart from "@/components/SurplusOverTimeChart";
 import IngredientWasteChart from "@/components/IngredientWasteChart";
-import EmissionsReductionChart from "@/components/EmissionsReductionChart";
 
 interface BusinessData {
   businessName?: string;
@@ -40,9 +39,6 @@ const BusinessDashboard = () => {
   
   // State for ingredient waste chart time frame
   const [ingredientTimeFrame, setIngredientTimeFrame] = useState<"week" | "month" | "year">("week");
-
-  // State for emissions chart time frame
-  const [emissionsTimeFrame, setEmissionsTimeFrame] = useState<"week" | "month" | "year">("month");
 
   // Mock dashboard metrics
   const dashboardMetrics = {
@@ -139,65 +135,6 @@ const BusinessDashboard = () => {
     { name: "Dairy", value: 20 },
   ];
 
-  // Mock emissions reduction data for different time frames
-  const emissionsWeekData = [
-    { date: "Apr 1", amount: 43.2 },
-    { date: "Apr 2", amount: 44.1 },
-    { date: "Apr 3", amount: 42.5 },
-    { date: "Apr 4", amount: 40.8 },
-    { date: "Apr 5", amount: 38.7 },
-    { date: "Apr 6", amount: 39.2 },
-    { date: "Apr 7", amount: 37.8 },
-  ];
-
-  const emissionsMonthData = [
-    ...emissionsWeekData,
-    { date: "Apr 8", amount: 42.1 },
-    { date: "Apr 9", amount: 40.5 },
-    { date: "Apr 10", amount: 38.2 },
-    { date: "Apr 11", amount: 39.1 },
-    { date: "Apr 12", amount: 40.0 },
-    { date: "Apr 13", amount: 38.4 },
-    { date: "Apr 14", amount: 37.6 },
-    { date: "Apr 15", amount: 36.1 },
-    { date: "Apr 16", amount: 37.2 },
-    { date: "Apr 17", amount: 38.3 },
-    { date: "Apr 18", amount: 36.9 },
-    { date: "Apr 19", amount: 35.2 },
-    { date: "Apr 20", amount: 34.7 },
-    { date: "Apr 21", amount: 35.5 },
-    { date: "Apr 22", amount: 36.1 },
-    { date: "Apr 23", amount: 35.7 },
-    { date: "Apr 24", amount: 34.8 },
-    { date: "Apr 25", amount: 33.3 },
-    { date: "Apr 26", amount: 36.1 },
-    { date: "Apr 27", amount: 35.6 },
-    { date: "Apr 28", amount: 34.9 },
-    { date: "Apr 29", amount: 33.4 },
-    { date: "Apr 30", amount: 32.8 },
-  ];
-  
-  const emissionsYearData = [
-    { date: "Jan", amount: 48.5 },
-    { date: "Feb", amount: 46.3 },
-    { date: "Mar", amount: 45.2 },
-    { date: "Apr", amount: 38.3 },
-    { date: "May", amount: 37.6 },
-    { date: "Jun", amount: 34.2 },
-    { date: "Jul", amount: 35.1 },
-    { date: "Aug", amount: 35.4 },
-    { date: "Sep", amount: 33.8 },
-    { date: "Oct", amount: 32.7 },
-    { date: "Nov", amount: 31.3 },
-    { date: "Dec", amount: 29.9 },
-  ];
-  
-  // Monthly comparison data for emissions
-  const emissionsMonthlyComparison = [
-    { month: "March", amount: 45, percentage: 0 },
-    { month: "April", amount: 38, percentage: -15 },
-  ];
-
   // Get the appropriate surplus data based on selected time frame
   const getSurplusDataByTimeFrame = () => {
     switch (surplusTimeFrame) {
@@ -225,28 +162,6 @@ const BusinessDashboard = () => {
         return ingredientWasteWeekData;
     }
   };
-
-  // Get the appropriate emissions data based on selected time frame
-  const getEmissionsDataByTimeFrame = () => {
-    switch (emissionsTimeFrame) {
-      case "week":
-        return emissionsWeekData;
-      case "month":
-        return emissionsMonthData;
-      case "year":
-        return emissionsYearData;
-      default:
-        return emissionsMonthData;
-    }
-  };
-
-  // Mock ingredient waste data
-  const ingredientWasteData = [
-    { name: "Bread", value: 40 },
-    { name: "Vegetables", value: 25 },
-    { name: "Fruits", value: 20 },
-    { name: "Dairy", value: 15 },
-  ];
 
   useEffect(() => {
     // Check authentication status
@@ -307,10 +222,6 @@ const BusinessDashboard = () => {
   
   const handleIngredientTimeFrameChange = (timeFrame: "week" | "month" | "year") => {
     setIngredientTimeFrame(timeFrame);
-  };
-
-  const handleEmissionsTimeFrameChange = (timeFrame: "week" | "month" | "year") => {
-    setEmissionsTimeFrame(timeFrame);
   };
 
   if (isLoading) {
@@ -397,7 +308,7 @@ const BusinessDashboard = () => {
             </div>
           </Card>
           
-          {/* Ingredient waste chart - now with time frame selector */}
+          {/* Ingredient waste chart - with time frame selector */}
           <Card className="p-4">
             <h3 className="text-lg font-semibold text-[#472D21] mb-2">Ingredient Waste Breakdown</h3>
             <div className="h-[300px]">
@@ -406,19 +317,6 @@ const BusinessDashboard = () => {
                 variant="donut"
                 timeFrame={ingredientTimeFrame}
                 onTimeFrameChange={handleIngredientTimeFrameChange}
-              />
-            </div>
-          </Card>
-          
-          {/* Emissions Reduction Chart - New Component */}
-          <Card className="p-4">
-            <h3 className="text-lg font-semibold text-[#472D21] mb-2">Emissions Reduction Over Time</h3>
-            <div className="h-[380px]">
-              <EmissionsReductionChart 
-                dailyData={getEmissionsDataByTimeFrame()}
-                monthlyData={emissionsMonthlyComparison}
-                timeFrame={emissionsTimeFrame}
-                onTimeFrameChange={handleEmissionsTimeFrameChange}
               />
             </div>
           </Card>
