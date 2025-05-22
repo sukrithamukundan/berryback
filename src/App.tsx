@@ -17,16 +17,21 @@ import BusinessProfile from "./pages/BusinessProfile";
 import BusinessOrders from "./pages/BusinessOrders";
 import ManageSurplus from "./pages/ManageSurplus";
 import PhonePreview from "./components/PhonePreview";
+import { useIsMobile } from "./hooks/use-mobile";
 
 const queryClient = new QueryClient();
 
 const MobileContainer = ({ children }: { children: React.ReactNode }) => {
-  const isMobileView = window.matchMedia("(max-width: 768px)").matches;
+  // In a production environment or when published, we always want to show the mobile view
+  // without the phone frame
+  const isProd = import.meta.env.PROD;
   
-  if (isMobileView) {
+  // If we're in production or on a mobile device, render without the phone frame
+  if (isProd || window.matchMedia("(max-width: 768px)").matches) {
     return <>{children}</>;
   }
   
+  // Only show the phone preview in development on larger screens
   return (
     <div className="flex justify-center items-start py-4">
       <PhonePreview>{children}</PhonePreview>

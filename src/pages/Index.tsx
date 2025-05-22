@@ -120,8 +120,9 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     </>
   );
 
-  // Determine if we should use the mobile container or not
-  const isMobileView = window.matchMedia("(max-width: 768px)").matches;
+  // In a production environment, we always want to show the mobile view
+  const isProd = import.meta.env.PROD;
+  const isMobileView = isProd || window.matchMedia("(max-width: 768px)").matches;
 
   return (
     <div className="min-h-screen bg-background">
