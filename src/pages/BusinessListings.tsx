@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Edit, Plus, Loader2, LogOut } from "lucide-react";
+import { ArrowLeft, Edit, Plus, Loader2 } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,21 +28,6 @@ const BusinessListings = () => {
   
   // Mock data for business listings
   const [surplusItems, setSurplusItems] = useState<SurplusItem[]>([]);
-
-  const handleLogout = () => {
-    // Clear user data
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userType");
-    
-    // Show toast notification
-    toast({
-      title: "Signed out",
-      description: "You've been successfully signed out.",
-    });
-    
-    // Navigate to root page
-    navigate('/');
-  };
 
   useEffect(() => {
     // Check if this is a new registration
@@ -127,24 +111,14 @@ const BusinessListings = () => {
           </Button>
           <div className="text-xl font-bold">Your Listings</div>
         </div>
-        <div className="flex items-center">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="text-white mr-2" 
-            onClick={handleLogout}
-          >
-            <LogOut className="h-5 w-5" />
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="text-white" 
-            onClick={() => navigate('/add-surplus')}
-          >
-            <Plus className="h-5 w-5" />
-          </Button>
-        </div>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="text-white" 
+          onClick={() => navigate('/add-surplus')}
+        >
+          <Plus className="h-5 w-5" />
+        </Button>
       </div>
 
       <div className="p-4">
