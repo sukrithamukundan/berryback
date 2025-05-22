@@ -7,10 +7,8 @@ const HeroSection = () => {
   const navigate = useNavigate();
   
   const handleGetStarted = () => {
-    // Store login state in localStorage
-    localStorage.setItem("isLoggedIn", "true");
-    // Refresh the page to apply the login state
-    window.location.reload();
+    // Navigate to auth page instead of directly logging in
+    navigate('/auth');
   };
   
   return (
