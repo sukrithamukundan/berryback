@@ -1,16 +1,34 @@
-
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Lock, Mail, User } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [userType, setUserType] = useState<"consumer" | "business">("consumer");
+  
+  // Ensure we check login status on mount
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const type = localStorage.getItem("userType") as "consumer" | "business" | null;
+    
+    if (loggedIn && type) {
+      redirectBasedOnType(type);
+    }
+  }, []);
+  
+  const redirectBasedOnType = (type: string) => {
+    if (type === "business") {
+      navigate('/business-listings', { replace: true });
+    } else {
+      navigate('/', { replace: true });
+    }
+  };
   
   const handleSignIn = () => {
     // For demo purposes, set the user as logged in
@@ -22,11 +40,8 @@ const Auth = () => {
       description: "You've been successfully signed in.",
     });
     
-    if (userType === "business") {
-      navigate('/business-dashboard');
-    } else {
-      navigate('/');
-    }
+    // Redirect based on user type
+    redirectBasedOnType(userType);
   };
   
   const handleCreateAccount = () => {
@@ -39,17 +54,14 @@ const Auth = () => {
       description: "Your account has been successfully created.",
     });
     
-    if (userType === "business") {
-      navigate('/business-dashboard');
-    } else {
-      navigate('/');
-    }
+    // Redirect based on user type
+    redirectBasedOnType(userType);
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
-      <div className="max-w-xs w-full">
-        <div className="text-center mb-10">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-8">
           <div className="h-32 w-32 mx-auto mb-6">
             <svg 
               viewBox="0 0 100 100" 
@@ -79,46 +91,78 @@ const Auth = () => {
           <h1 className="text-4xl font-bold text-[#472D21] mb-3">
             Berry Back
           </h1>
-          <p className="text-lg text-[#472D21] px-6">
+          <p className="text-lg text-[#472D21] px-6 mb-6">
             Why wait in line when you can have your discounted food ready and waiting for you?
           </p>
-        </div>
-        
-        <div className="mb-6">
-          <p className="text-lg font-medium text-[#472D21] mb-3 text-center">I am a...</p>
-          <RadioGroup 
-            defaultValue="consumer" 
-            value={userType} 
-            onValueChange={(value) => setUserType(value as "consumer" | "business")}
-            className="grid grid-cols-2 gap-4"
-          >
-            <div className="flex items-center space-x-2 border-2 border-[#472D21]/30 rounded-md p-3 hover:bg-[#472D21]/5 transition-colors">
-              <RadioGroupItem value="consumer" id="consumer" className="text-[#472D21]" />
-              <Label htmlFor="consumer" className="cursor-pointer flex-1">Customer</Label>
-            </div>
-            <div className="flex items-center space-x-2 border-2 border-[#472D21]/30 rounded-md p-3 hover:bg-[#472D21]/5 transition-colors">
-              <RadioGroupItem value="business" id="business" className="text-[#472D21]" />
-              <Label htmlFor="business" className="cursor-pointer flex-1">Business</Label>
-            </div>
-          </RadioGroup>
-        </div>
-        
-        <Separator className="my-6 bg-[#472D21]/20" />
-        
-        <div className="space-y-4">
-          <Button 
-            onClick={handleSignIn}
-            className="bg-[#472D21] hover:bg-[#5A392C] w-full text-white py-6 text-lg"
-          >
-            Sign in
-          </Button>
-          <Button 
-            onClick={handleCreateAccount}
-            variant="outline"
-            className="w-full border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 py-6 text-lg"
-          >
-            Create Account
-          </Button>
+          
+          <Tabs defaultValue="consumer" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger 
+                value="consumer" 
+                onClick={() => setUserType("consumer")}
+              >
+                Customer
+              </TabsTrigger>
+              <TabsTrigger 
+                value="business" 
+                onClick={() => setUserType("business")}
+              >
+                Business
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="consumer">
+              <div className="space-y-4">
+                <Button 
+                  onClick={handleSignIn}
+                  className="bg-[#472D21] hover:bg-[#5A392C] w-full text-white py-6 text-lg"
+                >
+                  Sign in as Customer
+                </Button>
+                <Button 
+                  onClick={handleCreateAccount}
+                  variant="outline"
+                  className="w-full border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 py-6 text-lg"
+                >
+                  Create Customer Account
+                </Button>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="business">
+              <div className="space-y-4 mb-6">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                    <Input id="email" type="email" placeholder="your@email.com" className="pl-10" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                    <Input id="password" type="password" placeholder="••••••••" className="pl-10" />
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <Button 
+                  onClick={handleSignIn}
+                  className="bg-[#472D21] hover:bg-[#5A392C] w-full text-white py-6 text-lg"
+                >
+                  Sign in as Business
+                </Button>
+                <Button 
+                  onClick={() => navigate('/register-company')}
+                  variant="outline"
+                  className="w-full border-2 border-[#472D21] text-[#472D21] hover:bg-[#472D21]/10 py-6 text-lg"
+                >
+                  Register Business
+                </Button>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
