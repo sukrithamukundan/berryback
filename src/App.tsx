@@ -41,7 +41,11 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index skipSplash={true} />} />
+            <Route path="/" element={
+              isLoggedIn && userType === "business" ? 
+                <Navigate to="/business-dashboard" /> : 
+                <Index skipSplash={true} />
+            } />
             <Route path="/auth" element={<Auth />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/profile" element={<Profile />} />
