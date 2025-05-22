@@ -11,7 +11,7 @@ const WelcomeMessage = ({ businessName = "Your Business" }: WelcomeMessageProps)
   
   return (
     <div className="mb-4 p-4 bg-[#472D21]/10 rounded-lg">
-      <h3 className="text-lg font-semibold text-[#472D21]">Welcome to BerryBack!</h3>
+      <h3 className="text-lg font-semibold text-[#472D21]">Welcome to BerryBack, {businessName}!</h3>
       <p className="text-sm text-gray-700 mb-3">
         Your business is now registered. Start adding surplus food items to reduce waste and earn more.
       </p>

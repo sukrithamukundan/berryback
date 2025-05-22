@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -50,13 +50,22 @@ const RegisterCompany = () => {
     // For demo purposes, simulate a successful registration
     console.log("Business registration data:", data);
     
+    // Generate a unique business ID
+    const businessId = `business_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
     // Set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userType", "business");
+    localStorage.setItem("businessId", businessId);
     
     // Store the business information
     localStorage.setItem("businessName", data.businessName);
     localStorage.setItem("businessType", data.businessType);
+    
+    // Initialize empty surplus items array for this business
+    const allSurplusItems = JSON.parse(localStorage.getItem("allSurplusItems") || "{}");
+    allSurplusItems[businessId] = [];
+    localStorage.setItem("allSurplusItems", JSON.stringify(allSurplusItems));
     
     // Set a flag for new registration to show welcome message
     sessionStorage.setItem("newRegistration", "true");
@@ -67,7 +76,7 @@ const RegisterCompany = () => {
       description: "Your business account has been created.",
     });
     
-    // Redirect to business dashboard
+    // Redirect to business listings
     navigate('/business-listings');
   };
 

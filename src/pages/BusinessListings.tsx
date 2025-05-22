@@ -26,11 +26,11 @@ const BusinessListings = () => {
   const [loading, setLoading] = useState(true);
   const [isNewRegistration, setIsNewRegistration] = useState(false);
   const [surplusItems, setSurplusItems] = useState<SurplusItem[]>([]);
+  const businessName = localStorage.getItem("businessName") || "Your Business";
 
   useEffect(() => {
     // Check if this is a new registration
     const isNewReg = sessionStorage.getItem("newRegistration") === "true";
-    const businessName = localStorage.getItem("businessName") || "Your Business";
     
     if (isNewReg) {
       setIsNewRegistration(true);
@@ -43,9 +43,23 @@ const BusinessListings = () => {
       });
     }
     
-    // Simulate API call to fetch business listings
-    setTimeout(() => {
-      // If we have some items in localStorage, use those
+    // Load surplus items
+    loadSurplusItems();
+  }, [toast]);
+
+  const loadSurplusItems = () => {
+    setLoading(true);
+    
+    // Check for items specifically added by this business
+    const businessId = localStorage.getItem("businessId") || "default-business";
+    const allSurplusItems = JSON.parse(localStorage.getItem("allSurplusItems") || "{}");
+    const businessItems = allSurplusItems[businessId] || [];
+    
+    if (businessItems.length > 0) {
+      // If the business has added items, use those
+      setSurplusItems(businessItems);
+    } else {
+      // Otherwise check if we have some items in localStorage from a previous session
       const storedItems = localStorage.getItem("surplusItems");
       
       if (storedItems) {
@@ -91,9 +105,10 @@ const BusinessListings = () => {
           }
         ]);
       }
-      setLoading(false);
-    }, 800);
-  }, [toast]);
+    }
+    
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -121,7 +136,7 @@ const BusinessListings = () => {
       </div>
 
       <div className="p-4">
-        {isNewRegistration && <WelcomeMessage />}
+        {isNewRegistration && <WelcomeMessage businessName={businessName} />}
       
         <h2 className="text-xl font-semibold mb-4 text-[#472D21]">Active Listings</h2>
         
