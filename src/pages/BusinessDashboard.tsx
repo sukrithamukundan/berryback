@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
-import { PlusCircle, ArrowRight, Package, Clock, X, ChartBarIcon } from "lucide-react";
+import { PlusCircle, ArrowRight, Package, Clock, X, ChartBarIcon, PieChart, LineChart, ArrowDown } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 import RevenueChart from "@/components/RevenueChart";
+import SurplusOverTimeChart from "@/components/SurplusOverTimeChart";
+import IngredientWasteChart from "@/components/IngredientWasteChart";
 
 interface BusinessData {
   businessName?: string;
@@ -52,6 +54,39 @@ const BusinessDashboard = () => {
     { time: "2 PM", amount: 8.50 },
     { time: "3 PM", amount: 3.50 },
   ];
+
+  // Mock surplus over time data
+  const surplusOverTimeData = [
+    { date: "Apr 1", amount: 2.3 },
+    { date: "Apr 2", amount: 3.1 },
+    { date: "Apr 3", amount: 2.5 },
+    { date: "Apr 4", amount: 3.8 },
+    { date: "Apr 5", amount: 2.7 },
+    { date: "Apr 6", amount: 5.9 },
+    { date: "Apr 7", amount: 4.8 },
+    { date: "Apr 8", amount: 3.5 },
+    { date: "Apr 9", amount: 3.2 },
+    { date: "Apr 10", amount: 3.7 },
+    { date: "Apr 11", amount: 4.1 },
+    { date: "Apr 12", amount: 5.0 },
+    { date: "Apr 13", amount: 4.2 },
+    { date: "Apr 14", amount: 3.6 },
+  ];
+
+  // Mock ingredient waste data
+  const ingredientWasteData = [
+    { name: "Bread", value: 40 },
+    { name: "Vegetables", value: 25 },
+    { name: "Fruits", value: 20 },
+    { name: "Dairy", value: 15 },
+  ];
+
+  // Mock daily waste trends
+  const wasteReductionData = {
+    currentMonth: 15, // 15% reduction
+    monday: "Peak day",
+    recommendedAction: "Reduce production by 15% on Mondays"
+  };
 
   useEffect(() => {
     // Check authentication status
@@ -170,6 +205,63 @@ const BusinessDashboard = () => {
             <div className="flex items-center mt-2">
               <span className="text-3xl font-bold text-[#472D21] mr-2">{dashboardMetrics.rescuedYesterday}</span>
               <Package className="h-6 w-6 text-[#472D21]" />
+            </div>
+          </Card>
+        </div>
+
+        {/* Statistics Cards */}
+        <div className="space-y-6">
+          <h2 className="text-xl font-bold text-[#472D21]">Food Waste Analytics</h2>
+          
+          {/* Surplus over time chart */}
+          <Card className="p-4">
+            <h3 className="text-lg font-semibold text-[#472D21] mb-2">Surplus Food Quantity Over Time</h3>
+            <div className="h-[200px]">
+              <SurplusOverTimeChart data={surplusOverTimeData} />
+            </div>
+            <div className="mt-2 bg-blue-100 p-2 rounded-md flex items-center">
+              <span className="text-blue-700 font-medium text-sm">Peak surplus typically occurs on Mondays</span>
+            </div>
+          </Card>
+          
+          {/* Ingredient waste charts - side by side on larger screens */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="p-4">
+              <h3 className="text-lg font-semibold text-[#472D21] mb-2">Ingredient Waste Breakdown</h3>
+              <div className="h-[200px]">
+                <IngredientWasteChart data={ingredientWasteData} />
+              </div>
+            </Card>
+            
+            <Card className="p-4">
+              <h3 className="text-lg font-semibold text-[#472D21] mb-2">Daily Ingredient Waste Trends</h3>
+              <div className="h-[200px]">
+                <IngredientWasteChart data={ingredientWasteData} variant="donut" />
+              </div>
+            </Card>
+          </div>
+          
+          {/* Recommendation card */}
+          <Card className="bg-red-50 p-4">
+            <div className="flex items-center">
+              <div className="bg-red-400 rounded-full p-2 mr-3">
+                <ArrowDown className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">Waste Reduction Recommendation</h3>
+                <p className="text-gray-700 mt-1">{wasteReductionData.recommendedAction}</p>
+              </div>
+            </div>
+          </Card>
+          
+          {/* Waste reduction stats */}
+          <Card className="p-4">
+            <h3 className="text-lg font-semibold text-[#472D21] mb-2">Food Waste Reduction</h3>
+            <div className="flex items-center justify-center space-x-4">
+              <div className="text-center">
+                <span className="text-3xl font-bold text-green-500">-{wasteReductionData.currentMonth}%</span>
+                <p className="text-sm text-gray-500">This Month</p>
+              </div>
             </div>
           </Card>
         </div>
