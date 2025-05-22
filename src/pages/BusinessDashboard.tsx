@@ -132,13 +132,6 @@ const BusinessDashboard = () => {
     { name: "Dairy", value: 15 },
   ];
 
-  // Mock daily waste trends
-  const wasteReductionData = {
-    currentMonth: 15, // 15% reduction
-    monday: "Peak day",
-    recommendedAction: "Reduce production by 15% on Mondays"
-  };
-
   useEffect(() => {
     // Check authentication status
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -297,25 +290,12 @@ const BusinessDashboard = () => {
             </Card>
           </div>
           
-          {/* Recommendation card */}
-          <Card className="bg-red-50 p-4">
-            <div className="flex items-center">
-              <div className="bg-red-400 rounded-full p-2 mr-3">
-                <ArrowDown className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">Waste Reduction Recommendation</h3>
-                <p className="text-gray-700 mt-1">{wasteReductionData.recommendedAction}</p>
-              </div>
-            </div>
-          </Card>
-          
           {/* Waste reduction stats */}
           <Card className="p-4">
             <h3 className="text-lg font-semibold text-[#472D21] mb-2">Food Waste Reduction</h3>
             <div className="flex items-center justify-center space-x-4">
               <div className="text-center">
-                <span className="text-3xl font-bold text-green-500">-{wasteReductionData.currentMonth}%</span>
+                <span className="text-3xl font-bold text-green-500">-15%</span>
                 <p className="text-sm text-gray-500">This Month</p>
               </div>
             </div>
