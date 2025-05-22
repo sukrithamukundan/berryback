@@ -25,13 +25,26 @@ const App = () => {
   const [userType, setUserType] = useState<"consumer" | "business" | null>(null);
   
   useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
-    setIsLoggedIn(loggedIn);
-    
-    if (loggedIn) {
+    const checkUserStatus = () => {
+      const loggedIn = localStorage.getItem("isLoggedIn") === "true";
       const type = localStorage.getItem("userType") as "consumer" | "business" | null;
-      setUserType(type || "consumer");
-    }
+      
+      console.log("Auth status:", loggedIn, "User type:", type);
+      
+      setIsLoggedIn(loggedIn);
+      
+      if (loggedIn && type) {
+        setUserType(type);
+      } else {
+        setUserType(null);
+      }
+    };
+    
+    checkUserStatus();
+    
+    // Listen for storage events to update state if changed in another tab
+    window.addEventListener('storage', checkUserStatus);
+    return () => window.removeEventListener('storage', checkUserStatus);
   }, []);
 
   return (
@@ -43,12 +56,12 @@ const App = () => {
           <Routes>
             <Route path="/" element={
               isLoggedIn && userType === "business" ? 
-                <Navigate to="/business-dashboard" /> : 
+                <Navigate to="/business-dashboard" replace /> : 
                 <Index skipSplash={true} />
             } />
             <Route path="/auth" element={
               isLoggedIn ? 
-                (userType === "business" ? <Navigate to="/business-dashboard" /> : <Navigate to="/" />) : 
+                (userType === "business" ? <Navigate to="/business-dashboard" replace /> : <Navigate to="/" replace />) : 
                 <Auth />
             } />
             <Route path="/orders" element={<Orders />} />
@@ -56,12 +69,36 @@ const App = () => {
             <Route path="/food/:id" element={<FoodItemDetails />} />
             
             {/* Business Routes */}
-            <Route path="/business-dashboard" element={<BusinessDashboard />} />
-            <Route path="/add-surplus" element={<AddSurplus />} />
-            <Route path="/manage-surplus" element={<ManageSurplus />} />
-            <Route path="/edit-surplus/:id" element={<AddSurplus />} />
-            <Route path="/business-orders" element={<BusinessOrders />} />
-            <Route path="/business-profile" element={<BusinessProfile />} />
+            <Route path="/business-dashboard" element={
+              isLoggedIn && userType === "business" ? 
+                <BusinessDashboard /> : 
+                <Navigate to="/auth" replace />
+            } />
+            <Route path="/add-surplus" element={
+              isLoggedIn && userType === "business" ? 
+                <AddSurplus /> : 
+                <Navigate to="/auth" replace />
+            } />
+            <Route path="/manage-surplus" element={
+              isLoggedIn && userType === "business" ? 
+                <ManageSurplus /> : 
+                <Navigate to="/auth" replace />
+            } />
+            <Route path="/edit-surplus/:id" element={
+              isLoggedIn && userType === "business" ? 
+                <AddSurplus /> : 
+                <Navigate to="/auth" replace />
+            } />
+            <Route path="/business-orders" element={
+              isLoggedIn && userType === "business" ? 
+                <BusinessOrders /> : 
+                <Navigate to="/auth" replace />
+            } />
+            <Route path="/business-profile" element={
+              isLoggedIn && userType === "business" ? 
+                <BusinessProfile /> : 
+                <Navigate to="/auth" replace />
+            } />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

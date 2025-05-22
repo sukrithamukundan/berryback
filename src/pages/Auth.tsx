@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,6 +13,24 @@ const Auth = () => {
   const { toast } = useToast();
   const [userType, setUserType] = useState<"consumer" | "business">("consumer");
   
+  // Ensure we check login status on mount
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const type = localStorage.getItem("userType") as "consumer" | "business" | null;
+    
+    if (loggedIn && type) {
+      redirectBasedOnType(type);
+    }
+  }, []);
+  
+  const redirectBasedOnType = (type: string) => {
+    if (type === "business") {
+      navigate('/business-dashboard', { replace: true });
+    } else {
+      navigate('/', { replace: true });
+    }
+  };
+  
   const handleSignIn = () => {
     // For demo purposes, set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
@@ -23,12 +41,8 @@ const Auth = () => {
       description: "You've been successfully signed in.",
     });
     
-    // Explicitly route to the correct dashboard
-    if (userType === "business") {
-      navigate('/business-dashboard');
-    } else {
-      navigate('/');
-    }
+    // Redirect based on user type
+    redirectBasedOnType(userType);
   };
   
   const handleCreateAccount = () => {
@@ -41,12 +55,8 @@ const Auth = () => {
       description: "Your account has been successfully created.",
     });
     
-    // Explicitly route to the correct dashboard
-    if (userType === "business") {
-      navigate('/business-dashboard');
-    } else {
-      navigate('/');
-    }
+    // Redirect based on user type
+    redirectBasedOnType(userType);
   };
 
   return (
