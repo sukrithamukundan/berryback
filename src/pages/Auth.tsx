@@ -26,6 +26,7 @@ const Auth = () => {
   }, []);
   
   const redirectBasedOnType = (type: string) => {
+    console.log("Redirecting based on type:", type);
     if (type === "business") {
       navigate('/business-listings', { replace: true });
     } else {
@@ -43,8 +44,10 @@ const Auth = () => {
       description: "You've been successfully signed in.",
     });
     
-    // Redirect based on user type
-    redirectBasedOnType(userType);
+    // Redirect based on user type with a small delay to ensure localStorage is updated
+    setTimeout(() => {
+      redirectBasedOnType(userType);
+    }, 100);
   };
   
   const handleCreateAccount = () => {
@@ -57,8 +60,10 @@ const Auth = () => {
       description: "Your account has been successfully created.",
     });
     
-    // Redirect based on user type
-    redirectBasedOnType(userType);
+    // Redirect based on user type with a small delay to ensure localStorage is updated
+    setTimeout(() => {
+      redirectBasedOnType(userType);
+    }, 100);
   };
 
   return (

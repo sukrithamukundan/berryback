@@ -46,7 +46,14 @@ const App = () => {
     
     // Listen for storage events to update state if changed in another tab
     window.addEventListener('storage', checkUserStatus);
-    return () => window.removeEventListener('storage', checkUserStatus);
+    
+    // Also add a listener for custom events to catch any login/logout events
+    window.addEventListener('authChange', checkUserStatus);
+    
+    return () => {
+      window.removeEventListener('storage', checkUserStatus);
+      window.removeEventListener('authChange', checkUserStatus);
+    };
   }, []);
 
   return (
@@ -66,11 +73,7 @@ const App = () => {
                 (userType === "business" ? <Navigate to="/business-listings" replace /> : <Navigate to="/" replace />) : 
                 <Auth />
             } />
-            <Route path="/register-company" element={
-              isLoggedIn && userType === "business" ? 
-                <Navigate to="/business-listings" replace /> : 
-                <RegisterCompany />
-            } />
+            <Route path="/register-company" element={<RegisterCompany />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/food/:id" element={<FoodItemDetails />} />
@@ -112,7 +115,7 @@ const App = () => {
                 <Navigate to="/auth" replace />
             } />
             
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
