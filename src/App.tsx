@@ -13,6 +13,9 @@ import Profile from "./pages/Profile";
 import FoodItemDetails from "./pages/FoodItemDetails";
 import BusinessDashboard from "./pages/BusinessDashboard";
 import AddSurplus from "./pages/AddSurplus";
+import BusinessProfile from "./pages/BusinessProfile";
+import BusinessOrders from "./pages/BusinessOrders";
+import ManageSurplus from "./pages/ManageSurplus";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +42,9 @@ const App = () => {
             <Route path="/food/:id" element={<FoodItemDetails />} />
             <Route path="/business-dashboard" element={<BusinessDashboard />} />
             <Route path="/add-surplus" element={<AddSurplus />} />
+            <Route path="/business-profile" element={<BusinessProfile />} />
+            <Route path="/business-orders" element={<BusinessOrders />} />
+            <Route path="/manage-surplus" element={<ManageSurplus />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

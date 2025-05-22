@@ -2,32 +2,29 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { PlusCircle, ChevronLeft, Edit, Check, X, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
+import { PlusCircle, ArrowRight, Package, Clock } from "lucide-react";
+import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 
-interface SurplusItem {
-  id: string;
-  name: string;
-  description: string;
-  originalPrice: number;
-  discountedPrice: number;
-  quantity: number;
-  expiryDate: string;
-  image: string;
-  status: "Active" | "Sold Out" | "Expired";
-}
+interface BusinessDashboardProps {}
 
 const BusinessDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState<string | null>(null);
-  const [surplusItems, setSurplusItems] = useState<SurplusItem[]>([]);
-  const [businessName, setBusinessName] = useState("Your Business");
   const [isLoading, setIsLoading] = useState(true);
-  const [isNewBusiness, setIsNewBusiness] = useState(false);
+  const [businessName, setBusinessName] = useState("Fresh Harvest Café");
+  const [businessLocation, setBusinessLocation] = useState("Trivandrum");
+  const [businessType, setBusinessType] = useState("Organic restaurant");
+
+  // Mock dashboard metrics
+  const dashboardMetrics = {
+    todaySurplus: 8,
+    pendingOrders: 5,
+    revenueToday: 124.50,
+    rescuedYesterday: 12
+  };
 
   useEffect(() => {
     // Check authentication status
@@ -47,255 +44,151 @@ const BusinessDashboard = () => {
     if (storedBusinessName) {
       setBusinessName(storedBusinessName);
     }
-    
-    // Check if this is a new business (no items yet)
-    const hasItems = localStorage.getItem("hasSurplusItems") === "true";
-    setIsNewBusiness(!hasItems);
-    
-    // Load surplus items (mock data for now)
-    const mockSurpluses: SurplusItem[] = [
-      {
-        id: "1",
-        name: "Vegetable Curry",
-        description: "Freshly made vegetable curry with rice.",
-        originalPrice: 12.99,
-        discountedPrice: 6.50,
-        quantity: 3,
-        expiryDate: "2025-05-24",
-        image: "https://picsum.photos/seed/vegetablecurry/300/300",
-        status: "Active"
-      },
-      {
-        id: "2",
-        name: "Chocolate Brownies",
-        description: "Rich chocolate brownies, baked fresh this morning.",
-        originalPrice: 3.99,
-        discountedPrice: 1.99,
-        quantity: 8,
-        expiryDate: "2025-05-23",
-        image: "https://picsum.photos/seed/brownies/300/300",
-        status: "Active"
-      },
-      {
-        id: "3",
-        name: "Fresh Baguette",
-        description: "Artisan baked baguette from our bakery.",
-        originalPrice: 4.50,
-        discountedPrice: 2.25,
-        quantity: 0,
-        expiryDate: "2025-05-23",
-        image: "https://picsum.photos/seed/baguette/300/300",
-        status: "Sold Out"
-      },
-      {
-        id: "4",
-        name: "Green Salad",
-        description: "Fresh green salad with house dressing.",
-        originalPrice: 7.99,
-        discountedPrice: 3.99,
-        quantity: 0,
-        expiryDate: "2025-05-22",
-        image: "https://picsum.photos/seed/greensalad/300/300",
-        status: "Expired"
-      },
-      {
-        id: "5",
-        name: "Fruit Platter",
-        description: "Seasonal fresh fruits selection.",
-        originalPrice: 15.99,
-        discountedPrice: 7.99,
-        quantity: 0,
-        expiryDate: "2025-05-21",
-        image: "https://picsum.photos/seed/fruitplatter/300/300",
-        status: "Expired"
-      }
-    ];
-    
-    // Simulate loading
+
     setTimeout(() => {
-      setSurplusItems(mockSurpluses);
       setIsLoading(false);
     }, 1000);
-    
-    console.log("Auth status:", loggedIn, "User type:", type);
   }, [navigate]);
-  
+
   const handleAddSurplus = () => {
     navigate("/add-surplus");
   };
 
-  const handleEditItem = (itemId: string) => {
-    toast({
-      title: "Edit Feature Coming Soon",
-      description: "The ability to edit surplus items is under development.",
-    });
+  const handleViewSurplus = () => {
+    navigate("/manage-surplus");
   };
 
-  // Group items by status
-  const activeItems = surplusItems.filter(item => item.status === "Active");
-  const soldOutItems = surplusItems.filter(item => item.status === "Sold Out");
-  const expiredItems = surplusItems.filter(item => item.status === "Expired");
-  
-  const getStatusIcon = (status: string) => {
-    switch(status) {
-      case "Active":
-        return <Check className="h-4 w-4 text-green-500" />;
-      case "Sold Out":
-        return <X className="h-4 w-4 text-red-500" />;
-      case "Expired":
-        return <Clock className="h-4 w-4 text-orange-500" />;
-      default:
-        return null;
-    }
+  const handleViewOrders = () => {
+    navigate("/business-orders");
   };
 
-  const getStatusColor = (status: string) => {
-    switch(status) {
-      case "Active":
-        return "bg-green-500";
-      case "Sold Out":
-        return "bg-red-500";
-      case "Expired":
-        return "bg-orange-500";
-      default:
-        return "bg-gray-500";
-    }
+  const handleViewProfile = () => {
+    navigate("/business-profile");
   };
-  
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white flex justify-center items-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-t-[#472D21] border-r-[#472D21]/70 border-b-[#472D21]/40 border-l-[#472D21]/20 border-solid rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#472D21] text-lg">Loading your business dashboard...</p>
+          <p className="text-[#472D21] text-lg">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
-  const renderItemsList = (items: SurplusItem[], title: string) => {
-    if (items.length === 0) return null;
-    
-    return (
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-[#472D21] mb-4 flex items-center">
-          {title}
-          <Badge className="ml-2" variant="outline">
-            {items.length}
-          </Badge>
-        </h2>
-        <div className="space-y-4">
-          {items.map(item => (
-            <Card key={item.id} className="overflow-hidden">
-              <div className="flex">
-                <div className="w-32 h-32 overflow-hidden flex-shrink-0">
-                  <img 
-                    src={item.image} 
-                    alt={item.name} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-4 flex-1">
-                  <div className="flex justify-between items-start mb-1">
-                    <h3 className="font-semibold text-lg text-[#472D21]">{item.name}</h3>
-                    <span className={`px-3 py-1 ${getStatusColor(item.status)} text-white text-sm rounded-full flex items-center gap-1`}>
-                      {getStatusIcon(item.status)}
-                      {item.status}
-                    </span>
-                  </div>
-                  <p className="text-gray-600 mb-2">{item.description}</p>
-                  <div className="flex items-baseline mb-1">
-                    <span className="text-sm line-through text-gray-500 mr-2">
-                      ${item.originalPrice.toFixed(2)}
-                    </span>
-                    <span className="text-xl font-bold text-[#472D21]">
-                      ${item.discountedPrice.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-end">
-                    <div>
-                      <p className="text-sm text-gray-500">
-                        Qty: {item.quantity}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        Expires: {new Date(item.expiryDate).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => handleEditItem(item.id)}
-                      className="text-blue-500"
-                    >
-                      <Edit className="h-5 w-5" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 pb-20">
       {/* Header */}
       <div className="bg-[#472D21] text-white p-4 flex items-center justify-between">
-        <div className="flex items-center">
-          <button 
-            className="mr-2 rounded-full p-1"
-            onClick={() => navigate('/')}
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-          <h1 className="text-xl font-bold">Your Listings</h1>
-        </div>
+        <h1 className="text-xl font-bold">BerryBack Business</h1>
         <button 
+          onClick={handleViewProfile}
           className="rounded-full p-1"
-          onClick={handleAddSurplus}
         >
-          <PlusCircle className="h-6 w-6" />
+          <ArrowRight className="h-6 w-6" />
         </button>
       </div>
-      
-      <div className="container mx-auto px-4 py-4">
-        {/* Welcome message for new businesses */}
-        {isNewBusiness && (
-          <div className="mb-6 bg-gray-200 rounded-lg p-6">
-            <h2 className="text-xl font-bold text-[#472D21] mb-2">Welcome to BerryBack!</h2>
-            <p className="text-gray-700 mb-4">
-              Your business is now registered. Start adding surplus food items to reduce waste and earn more.
-            </p>
+
+      <div className="container mx-auto px-4 py-6 space-y-6">
+        {/* Business info card */}
+        <Card className="p-6">
+          <h2 className="text-2xl font-bold text-[#472D21]">{businessName}</h2>
+          <p className="text-gray-600">{businessType} • {businessLocation}</p>
+        </Card>
+
+        {/* Dashboard metrics */}
+        <div className="grid grid-cols-2 gap-4">
+          <Card className="p-4">
+            <h3 className="text-sm text-gray-500">Today's Surplus</h3>
+            <div className="flex items-center mt-2">
+              <span className="text-3xl font-bold text-[#472D21] mr-2">{dashboardMetrics.todaySurplus}</span>
+              <Package className="h-6 w-6 text-[#472D21]" />
+            </div>
+          </Card>
+          <Card className="p-4">
+            <h3 className="text-sm text-gray-500">Pending Orders</h3>
+            <div className="flex items-center mt-2">
+              <span className="text-3xl font-bold text-[#472D21] mr-2">{dashboardMetrics.pendingOrders}</span>
+              <Clock className="h-6 w-6 text-[#472D21]" />
+            </div>
+          </Card>
+          <Card className="p-4">
+            <h3 className="text-sm text-gray-500">Revenue Today</h3>
+            <div className="flex items-center mt-2">
+              <span className="text-3xl font-bold text-[#472D21] mr-2">${dashboardMetrics.revenueToday.toFixed(2)}</span>
+              <svg className="h-6 w-6 text-green-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 6L12 2M12 2L8 6M12 2V18M21 12L17 16M17 16L13 12M17 16H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </Card>
+          <Card className="p-4">
+            <h3 className="text-sm text-gray-500">Rescued Yesterday</h3>
+            <div className="flex items-center mt-2">
+              <span className="text-3xl font-bold text-[#472D21] mr-2">{dashboardMetrics.rescuedYesterday}</span>
+              <Package className="h-6 w-6 text-[#472D21]" />
+            </div>
+          </Card>
+        </div>
+
+        {/* Quick actions */}
+        <div>
+          <h2 className="text-xl font-bold text-[#472D21] mb-4">Quick Actions</h2>
+          
+          {/* Add new surplus */}
+          <Card className="p-6 mb-4">
+            <div className="mb-4">
+              <h3 className="flex items-center text-lg font-semibold text-[#472D21]">
+                <PlusCircle className="mr-2 h-5 w-5" />
+                Add New Surplus
+              </h3>
+              <p className="text-gray-500 mt-1">List items that will soon expire</p>
+            </div>
             <Button 
+              className="w-full bg-[#472D21] hover:bg-[#5A392C] py-5"
               onClick={handleAddSurplus}
-              className="w-full bg-[#472D21] hover:bg-[#5A392C] py-5 text-lg"
             >
-              Add Your First Item
+              Add Items
             </Button>
-          </div>
-        )}
-        
-        {/* Listings grouped by status */}
-        {!isNewBusiness && (
-          <>
-            {renderItemsList(activeItems, "Active Listings")}
-            {renderItemsList(soldOutItems, "Sold Out")}
-            {renderItemsList(expiredItems, "Expired")}
-            
-            {surplusItems.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No listings found.</p>
-                <Button 
-                  onClick={handleAddSurplus}
-                  className="mt-4 bg-[#472D21] hover:bg-[#5A392C]"
-                >
-                  Add New Item
-                </Button>
-              </div>
-            )}
-          </>
-        )}
+          </Card>
+          
+          {/* Manage current surplus */}
+          <Card className="p-6 mb-4">
+            <div className="mb-4">
+              <h3 className="flex items-center text-lg font-semibold text-[#472D21]">
+                <Package className="mr-2 h-5 w-5" />
+                Manage Current Surplus
+              </h3>
+              <p className="text-gray-500 mt-1">Review and update your listed items</p>
+            </div>
+            <Button 
+              className="w-full bg-[#472D21] hover:bg-[#5A392C] py-5"
+              onClick={handleViewSurplus}
+            >
+              View All
+            </Button>
+          </Card>
+          
+          {/* Manage orders */}
+          <Card className="p-6">
+            <div className="mb-4">
+              <h3 className="flex items-center text-lg font-semibold text-[#472D21]">
+                <Clock className="mr-2 h-5 w-5" />
+                Current Orders
+              </h3>
+              <p className="text-gray-500 mt-1">View and manage pending orders</p>
+            </div>
+            <Button 
+              className="w-full bg-[#472D21] hover:bg-[#5A392C] py-5"
+              onClick={handleViewOrders}
+            >
+              View Orders
+            </Button>
+          </Card>
+        </div>
       </div>
+      
+      <BusinessBottomNavBar />
     </div>
   );
 };
