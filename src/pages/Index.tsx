@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import CategoryView from "@/components/CategoryView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BottomNavBar from "@/components/BottomNavBar";
-import PhonePreview from "@/components/PhonePreview";
 
 interface IndexProps {
   skipSplash?: boolean;
@@ -120,23 +119,7 @@ const Index = ({ skipSplash = false }: IndexProps) => {
     </>
   );
 
-  // In a production environment, we always want to show the mobile view
-  const isProd = import.meta.env.PROD;
-  const isMobileView = isProd || window.matchMedia("(max-width: 768px)").matches;
-
-  return (
-    <div className="min-h-screen bg-background">
-      {isMobileView ? (
-        content
-      ) : (
-        <div className="flex justify-center items-start py-4">
-          <PhonePreview>{content}</PhonePreview>
-        </div>
-      )}
-      
-      {!isLoggedIn && <Footer />}
-    </div>
-  );
+  return <div className="min-h-screen bg-background">{content}</div>;
 };
 
 export default Index;

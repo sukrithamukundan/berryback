@@ -16,25 +16,30 @@ import AddSurplus from "./pages/AddSurplus";
 import BusinessProfile from "./pages/BusinessProfile";
 import BusinessOrders from "./pages/BusinessOrders";
 import ManageSurplus from "./pages/ManageSurplus";
-import PhonePreview from "./components/PhonePreview";
-import { useIsMobile } from "./hooks/use-mobile";
 
 const queryClient = new QueryClient();
 
+// Standard mobile viewport width
+const MOBILE_WIDTH = 390;
+
 const MobileContainer = ({ children }: { children: React.ReactNode }) => {
-  // In a production environment or when published, we always want to show the mobile view
-  // without the phone frame
+  // In development on larger screens, we'll constrain the width to mobile size
+  // In production or on actual mobile devices, we'll use the full screen width
   const isProd = import.meta.env.PROD;
+  const isMobileDevice = typeof window !== 'undefined' && window.matchMedia("(max-width: 768px)").matches;
   
-  // If we're in production or on a mobile device, render without the phone frame
-  if (isProd || window.matchMedia("(max-width: 768px)").matches) {
+  if (isProd || isMobileDevice) {
     return <>{children}</>;
   }
   
-  // Only show the phone preview in development on larger screens
   return (
-    <div className="flex justify-center items-start py-4">
-      <PhonePreview>{children}</PhonePreview>
+    <div className="flex justify-center bg-gray-100 min-h-screen">
+      <div 
+        className="w-full max-w-[390px] bg-white shadow-lg"
+        style={{ height: '100vh', overflowY: 'auto' }}
+      >
+        {children}
+      </div>
     </div>
   );
 };
