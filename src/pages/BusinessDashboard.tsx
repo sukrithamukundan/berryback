@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
-import { PlusCircle, ArrowRight, Package, Clock } from "lucide-react";
+import { PlusCircle, ArrowRight, Package, Clock, X, ChartBarIcon } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
+import RevenueChart from "@/components/RevenueChart";
 
 interface BusinessData {
   businessName?: string;
@@ -28,6 +29,9 @@ const BusinessDashboard = () => {
     businessType: "Organic restaurant",
     location: "Trivandrum"
   });
+  
+  // State for revenue chart modal
+  const [showRevenueChart, setShowRevenueChart] = useState(false);
 
   // Mock dashboard metrics
   const dashboardMetrics = {
@@ -36,6 +40,18 @@ const BusinessDashboard = () => {
     revenueToday: 124.50,
     rescuedYesterday: 12
   };
+  
+  // Mock hourly revenue data for the chart
+  const hourlyRevenueData = [
+    { time: "8 AM", amount: 12.50 },
+    { time: "9 AM", amount: 18.25 },
+    { time: "10 AM", amount: 15.75 },
+    { time: "11 AM", amount: 22.00 },
+    { time: "12 PM", amount: 28.75 },
+    { time: "1 PM", amount: 15.25 },
+    { time: "2 PM", amount: 8.50 },
+    { time: "3 PM", amount: 3.50 },
+  ];
 
   useEffect(() => {
     // Check authentication status
@@ -85,6 +101,10 @@ const BusinessDashboard = () => {
   const handleViewProfile = () => {
     navigate("/business-profile");
   };
+  
+  const toggleRevenueChart = () => {
+    setShowRevenueChart(prev => !prev);
+  };
 
   if (isLoading) {
     return (
@@ -133,7 +153,10 @@ const BusinessDashboard = () => {
               <Clock className="h-6 w-6 text-[#472D21]" />
             </div>
           </Card>
-          <Card className="p-4">
+          <Card 
+            className="p-4 cursor-pointer hover:shadow-md transition-all" 
+            onClick={toggleRevenueChart}
+          >
             <h3 className="text-sm text-gray-500">Revenue Today</h3>
             <div className="flex items-center mt-2">
               <span className="text-3xl font-bold text-[#472D21] mr-2">${dashboardMetrics.revenueToday.toFixed(2)}</span>
@@ -207,6 +230,40 @@ const BusinessDashboard = () => {
           </Card>
         </div>
       </div>
+      
+      {/* Revenue Chart Modal */}
+      {showRevenueChart && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-md md:max-w-lg shadow-xl">
+            <div className="p-4 border-b flex justify-between items-center">
+              <h2 className="text-xl font-bold text-[#472D21] flex items-center">
+                <ChartBarIcon className="h-5 w-5 mr-2" />
+                Revenue Today: ${dashboardMetrics.revenueToday.toFixed(2)}
+              </h2>
+              <button 
+                onClick={toggleRevenueChart}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-4">
+              <RevenueChart data={hourlyRevenueData} />
+              <p className="text-sm text-gray-500 mt-4">
+                Hourly revenue distribution for today. Total: ${dashboardMetrics.revenueToday.toFixed(2)}
+              </p>
+            </div>
+            <div className="border-t p-4">
+              <Button 
+                className="w-full bg-[#472D21] hover:bg-[#5A392C]"
+                onClick={toggleRevenueChart}
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       
       <BusinessBottomNavBar />
     </div>
