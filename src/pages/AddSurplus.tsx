@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { ChevronLeft, Upload } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 import MenuItemSelector from "@/components/MenuItemSelector";
 import { FoodMenuItem } from "@/models/FoodMenuItem";
@@ -21,15 +21,15 @@ const AddSurplus = () => {
   const [discountedPrice, setDiscountedPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [expiryTime, setExpiryTime] = useState("");
+  const [pickupWithin, setPickupWithin] = useState("");
   const [isFromMenu, setIsFromMenu] = useState(false);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic form validation
-    if (!name || !description || !originalPrice || !discountedPrice || !quantity || !expiryDate || (!image && !imagePreview)) {
+    if (!name || !description || !originalPrice || !discountedPrice || !quantity || !expiryDate || !expiryTime || !pickupWithin) {
       toast({
         title: "Error",
         description: "Please fill in all required fields.",
@@ -47,21 +47,12 @@ const AddSurplus = () => {
     navigate("/business-dashboard");
   };
   
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
-  };
-  
   const handleMenuItemSelect = (item: FoodMenuItem) => {
     setName(item.name);
     setDescription(item.description);
     setOriginalPrice(item.originalPrice.toString());
     // Set discounted price to 60% of original price as default
     setDiscountedPrice((item.originalPrice * 0.6).toFixed(2));
-    setImagePreview(item.image);
     setIsFromMenu(true);
   };
   
@@ -84,25 +75,23 @@ const AddSurplus = () => {
           <MenuItemSelector onSelect={handleMenuItemSelect} />
           
           <form className="space-y-4 mt-6" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <Input
-                  id="name"
-                  placeholder="Item Name*"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              
-              <div>
-                <Textarea
-                  id="description"
-                  placeholder="Description*"
-                  className="min-h-[80px]"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
+            <div>
+              <Input
+                id="name"
+                placeholder="Item Name*"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <Textarea
+                id="description"
+                placeholder="Description*"
+                className="min-h-[80px]"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </div>
             
             <div className="grid grid-cols-2 gap-3">
@@ -136,38 +125,30 @@ const AddSurplus = () => {
               />
               
               <Input
+                id="pickup-within"
+                type="text"
+                placeholder="Pickup Within (e.g., 2 hours)*"
+                value={pickupWithin}
+                onChange={(e) => setPickupWithin(e.target.value)}
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <Input
                 id="expiry-date"
                 type="date"
                 placeholder="Expiry Date*"
                 value={expiryDate}
                 onChange={(e) => setExpiryDate(e.target.value)}
               />
-            </div>
-            
-            <div>
-              {imagePreview && (
-                <div className="mb-3">
-                  <img 
-                    src={imagePreview} 
-                    alt="Preview" 
-                    className="w-full h-40 object-cover rounded border border-gray-200"
-                  />
-                </div>
-              )}
               
-              <input
-                type="file"
-                id="image-upload"
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageUpload}
+              <Input
+                id="expiry-time"
+                type="time"
+                placeholder="Expiry Time*"
+                value={expiryTime}
+                onChange={(e) => setExpiryTime(e.target.value)}
               />
-              <label htmlFor="image-upload" className="cursor-pointer">
-                <div className="border border-dashed border-gray-300 rounded p-4 flex flex-col items-center justify-center">
-                  <Upload className="h-6 w-6 text-gray-400 mb-1" />
-                  <p className="text-sm text-gray-500">Upload Photo*</p>
-                </div>
-              </label>
             </div>
             
             <Button 
