@@ -25,12 +25,25 @@ const IngredientWasteChart = ({ data, variant = "pie" }: IngredientWasteChartPro
           outerRadius={outerRadius}
           dataKey="value"
           stroke="none"
-          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+          // Improve label rendering to prevent text from being cut off
+          label={({ name, percent }) => {
+            // Only show percentage in the chart for better readability
+            return `${(percent * 100).toFixed(0)}%`;
+          }}
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
+        <Legend 
+          layout="horizontal"
+          verticalAlign="bottom"
+          align="center"
+          wrapperStyle={{
+            paddingTop: "20px",
+            fontSize: "12px"
+          }}
+        />
         <Tooltip
           formatter={(value) => `${value}%`}
           contentStyle={{ 
