@@ -27,7 +27,7 @@ const BusinessProfile = () => {
       title: "Logged out",
       description: "You've been successfully logged out.",
     });
-    navigate('/auth');
+    navigate('/'); // Changed from '/auth' to '/' to redirect to splash screen
   };
 
   return (
@@ -194,3 +194,4 @@ const BusinessProfile = () => {
 };
 
 export default BusinessProfile;
+

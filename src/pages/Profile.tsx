@@ -126,10 +126,9 @@ const Profile = () => {
   const handleLogout = () => {
     // Remove logged in status
     localStorage.removeItem("isLoggedIn");
-    // Navigate to home
+    localStorage.removeItem("userType");
+    // Navigate to home to show splash screen
     navigate('/');
-    // Reload page to reflect changes
-    window.location.reload();
   };
   
   // App Bar Component
@@ -370,3 +369,4 @@ const Profile = () => {
 };
 
 export default Profile;
+
