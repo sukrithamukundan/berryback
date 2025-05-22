@@ -273,22 +273,13 @@ const BusinessDashboard = () => {
             </div>
           </Card>
           
-          {/* Ingredient waste charts - side by side on larger screens */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card className="p-4">
-              <h3 className="text-lg font-semibold text-[#472D21] mb-2">Ingredient Waste Breakdown</h3>
-              <div className="h-[200px]">
-                <IngredientWasteChart data={ingredientWasteData} />
-              </div>
-            </Card>
-            
-            <Card className="p-4">
-              <h3 className="text-lg font-semibold text-[#472D21] mb-2">Daily Ingredient Waste Trends</h3>
-              <div className="h-[200px]">
-                <IngredientWasteChart data={ingredientWasteData} variant="donut" />
-              </div>
-            </Card>
-          </div>
+          {/* Ingredient waste chart - removed the side-by-side layout */}
+          <Card className="p-4">
+            <h3 className="text-lg font-semibold text-[#472D21] mb-2">Ingredient Waste Breakdown</h3>
+            <div className="h-[250px]">
+              <IngredientWasteChart data={ingredientWasteData} />
+            </div>
+          </Card>
           
           {/* Waste reduction stats */}
           <Card className="p-4">
