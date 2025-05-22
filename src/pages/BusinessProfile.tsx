@@ -6,11 +6,13 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ChevronLeft, Edit, Building2, MapPin, Phone, Mail, TrendingUp, Award } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
+import { useToast } from "@/hooks/use-toast";
 
 interface BusinessProfileProps {}
 
 const BusinessProfile = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +47,21 @@ const BusinessProfile = () => {
     
     setIsLoading(false);
   }, [navigate]);
+
+  const handleLogout = () => {
+    // Remove authentication data from localStorage
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userType");
+    
+    // Show toast notification
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+    
+    // Navigate to auth screen
+    navigate("/auth");
+  };
 
   if (isLoading) {
     return (
@@ -160,7 +177,11 @@ const BusinessProfile = () => {
             <Button variant="ghost" className="w-full justify-start py-6 border-b">
               <span className="text-left text-gray-700">Notifications</span>
             </Button>
-            <Button variant="ghost" className="w-full justify-start py-6 border-b text-red-500">
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start py-6 border-b text-red-500"
+              onClick={handleLogout}
+            >
               <span className="text-left">Log Out</span>
             </Button>
           </div>
