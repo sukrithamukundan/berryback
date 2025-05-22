@@ -187,9 +187,14 @@ const SurplusOverTimeChart = ({
               <path d="M16 6L12 2M12 2L8 6M12 2V18M21 12L17 16M17 16L13 12M17 16H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <span className="text-gray-700 text-sm font-medium">
-            {recommendation.message}
-          </span>
+          <div className="flex flex-col">
+            <span className="text-gray-700 text-sm font-medium">
+              Waste Reduction Recommendation
+            </span>
+            <span className="text-gray-700 text-sm">
+              {recommendation.message}
+            </span>
+          </div>
         </div>
       </div>
     </div>
