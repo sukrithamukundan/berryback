@@ -12,6 +12,8 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [userType, setUserType] = useState<"consumer" | "business">("consumer");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   
   // Ensure we check login status on mount
   useEffect(() => {
@@ -136,14 +138,28 @@ const Auth = () => {
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                    <Input id="email" type="email" placeholder="your@email.com" className="pl-10" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="your@email.com" 
+                      className="pl-10"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)} 
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                    <Input id="password" type="password" placeholder="••••••••" className="pl-10" />
+                    <Input 
+                      id="password" 
+                      type="password" 
+                      placeholder="••••••••" 
+                      className="pl-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
