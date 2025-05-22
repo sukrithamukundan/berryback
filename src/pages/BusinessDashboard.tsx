@@ -173,62 +173,6 @@ const BusinessDashboard = () => {
             </div>
           </Card>
         </div>
-
-        {/* Quick actions */}
-        <div>
-          <h2 className="text-xl font-bold text-[#472D21] mb-4">Quick Actions</h2>
-          
-          {/* Add new surplus */}
-          <Card className="p-6 mb-4">
-            <div className="mb-4">
-              <h3 className="flex items-center text-lg font-semibold text-[#472D21]">
-                <PlusCircle className="mr-2 h-5 w-5" />
-                Add New Surplus
-              </h3>
-              <p className="text-gray-500 mt-1">List items that will soon expire</p>
-            </div>
-            <Button 
-              className="w-full bg-[#472D21] hover:bg-[#5A392C] py-5"
-              onClick={handleAddSurplus}
-            >
-              Add Items
-            </Button>
-          </Card>
-          
-          {/* Manage current surplus */}
-          <Card className="p-6 mb-4">
-            <div className="mb-4">
-              <h3 className="flex items-center text-lg font-semibold text-[#472D21]">
-                <Package className="mr-2 h-5 w-5" />
-                Manage Current Surplus
-              </h3>
-              <p className="text-gray-500 mt-1">Review and update your listed items</p>
-            </div>
-            <Button 
-              className="w-full bg-[#472D21] hover:bg-[#5A392C] py-5"
-              onClick={handleViewSurplus}
-            >
-              View All
-            </Button>
-          </Card>
-          
-          {/* Manage orders */}
-          <Card className="p-6">
-            <div className="mb-4">
-              <h3 className="flex items-center text-lg font-semibold text-[#472D21]">
-                <Clock className="mr-2 h-5 w-5" />
-                Current Orders
-              </h3>
-              <p className="text-gray-500 mt-1">View and manage pending orders</p>
-            </div>
-            <Button 
-              className="w-full bg-[#472D21] hover:bg-[#5A392C] py-5"
-              onClick={handleViewOrders}
-            >
-              View Orders
-            </Button>
-          </Card>
-        </div>
       </div>
       
       {/* Revenue Chart Modal */}
