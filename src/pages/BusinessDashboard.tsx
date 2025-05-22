@@ -9,6 +9,7 @@ import RevenueChart from "@/components/RevenueChart";
 import SurplusOverTimeChart from "@/components/SurplusOverTimeChart";
 import IngredientWasteChart from "@/components/IngredientWasteChart";
 import EmissionsReductionChart from "@/components/EmissionsReductionChart";
+import IngredientRecommendation from "@/components/IngredientRecommendation";
 
 interface BusinessData {
   businessName?: string;
@@ -242,6 +243,42 @@ const BusinessDashboard = () => {
     { name: "Dairy", value: 15 },
   ];
 
+  // Mock data for ingredient recommendations
+  const ingredientRecommendations = [
+    {
+      name: "Bread",
+      currentUsage: 42,
+      projectedUsage: 52,
+      trend: "increase" as const,
+      priority: "high" as const,
+      recommendation: "Increase order by 25% to meet projected demand."
+    },
+    {
+      name: "Vegetables",
+      currentUsage: 37,
+      projectedUsage: 35,
+      trend: "decrease" as const,
+      priority: "medium" as const,
+      recommendation: "Slightly reduce order quantity by 5% to avoid waste."
+    },
+    {
+      name: "Fruits",
+      currentUsage: 28,
+      projectedUsage: 28,
+      trend: "stable" as const,
+      priority: "low" as const,
+      recommendation: "Maintain current order quantities."
+    },
+    {
+      name: "Dairy",
+      currentUsage: 15,
+      projectedUsage: 22,
+      trend: "increase" as const,
+      priority: "high" as const,
+      recommendation: "Increase order by 40% based on current waste patterns."
+    }
+  ];
+
   useEffect(() => {
     // Check authentication status
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -413,6 +450,14 @@ const BusinessDashboard = () => {
                 timeFrame={emissionsTimeFrame}
                 onTimeFrameChange={handleEmissionsTimeFrameChange}
               />
+            </div>
+          </Card>
+          
+          {/* Ingredient Purchase Recommendations */}
+          <Card className="p-4">
+            <h3 className="text-lg font-semibold text-[#472D21] mb-2">Ingredient Purchase Recommendations</h3>
+            <div>
+              <IngredientRecommendation recommendations={ingredientRecommendations} />
             </div>
           </Card>
         </div>
