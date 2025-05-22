@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,18 +12,130 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+interface SurplusItem {
+  id: string;
+  name: string;
+  description: string;
+  originalPrice: number;
+  discountedPrice: number;
+  quantity: number;
+  expiryDate: string;
+  image: string;
+  category: string;
+  status: "active" | "sold" | "expired";
+}
+
 const AddSurplus = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { id } = useParams();
+  const isEditing = !!id;
+  
+  const [formData, setFormData] = useState({
+    itemName: "",
+    description: "",
+    category: "meal",
+    dietType: "nonveg",
+    originalPrice: "",
+    discountedPrice: "",
+    expiryDate: "",
+    pickupTime: "",
+  });
   const [quantity, setQuantity] = useState(1);
+  
+  useEffect(() => {
+    // If we're editing, load the existing data
+    if (isEditing) {
+      // Get existing items from localStorage
+      const storedItems = localStorage.getItem("surplusItems");
+      if (storedItems) {
+        const items = JSON.parse(storedItems) as SurplusItem[];
+        const itemToEdit = items.find(item => item.id === id);
+        
+        if (itemToEdit) {
+          setFormData({
+            itemName: itemToEdit.name,
+            description: itemToEdit.description,
+            category: itemToEdit.category,
+            dietType: "nonveg", // Default as this wasn't stored before
+            originalPrice: itemToEdit.originalPrice.toString(),
+            discountedPrice: itemToEdit.discountedPrice.toString(),
+            expiryDate: itemToEdit.expiryDate,
+            pickupTime: "18:00", // Default as this wasn't stored before
+          });
+          setQuantity(itemToEdit.quantity);
+        }
+      }
+    }
+  }, [id, isEditing]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+  
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Surplus added!",
-      description: "Your surplus item has been listed successfully.",
-    });
-    navigate('/manage-surplus');
+    
+    // Generate a random image if none provided (for demo purposes)
+    const foodImages = [
+      "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=300&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1606313564200-e75d8e3ebe2e?q=80&w=300&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1608198093002-ad4e005484ec?q=80&w=300&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=300&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=300&auto=format&fit=crop"
+    ];
+    
+    const newItem: SurplusItem = {
+      id: isEditing ? id! : Date.now().toString(),
+      name: formData.itemName,
+      description: formData.description,
+      originalPrice: parseFloat(formData.originalPrice),
+      discountedPrice: parseFloat(formData.discountedPrice),
+      quantity: quantity,
+      expiryDate: formData.expiryDate,
+      image: foodImages[Math.floor(Math.random() * foodImages.length)],
+      category: formData.category,
+      status: "active"
+    };
+    
+    // Get existing items or initialize empty array
+    const existingItemsStr = localStorage.getItem("surplusItems");
+    let items: SurplusItem[] = [];
+    
+    if (existingItemsStr) {
+      items = JSON.parse(existingItemsStr);
+    }
+    
+    if (isEditing) {
+      // Update existing item
+      const index = items.findIndex(item => item.id === id);
+      if (index !== -1) {
+        items[index] = newItem;
+      }
+      
+      toast({
+        title: "Item updated!",
+        description: "Your surplus item has been updated successfully.",
+      });
+    } else {
+      // Add new item
+      items.push(newItem);
+      
+      toast({
+        title: "Item added!",
+        description: "Your surplus item has been listed successfully.",
+      });
+    }
+    
+    // Save to localStorage
+    localStorage.setItem("surplusItems", JSON.stringify(items));
+    
+    navigate('/business-listings');
   };
 
   return (
@@ -34,11 +146,11 @@ const AddSurplus = () => {
           variant="ghost" 
           size="icon" 
           className="mr-2 text-white" 
-          onClick={() => navigate('/business-dashboard')}
+          onClick={() => navigate('/business-listings')}
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <div className="text-xl font-bold">Add New Surplus</div>
+        <div className="text-xl font-bold">{isEditing ? "Edit Surplus Item" : "Add New Surplus"}</div>
       </div>
 
       <div className="p-4">
@@ -47,7 +159,13 @@ const AddSurplus = () => {
             <div className="space-y-4">
               <div>
                 <Label htmlFor="itemName">Item Name</Label>
-                <Input id="itemName" placeholder="e.g., Vegetable Curry" required />
+                <Input 
+                  id="itemName" 
+                  placeholder="e.g., Vegetable Curry" 
+                  required 
+                  value={formData.itemName}
+                  onChange={handleChange}
+                />
               </div>
               
               <div>
@@ -58,13 +176,18 @@ const AddSurplus = () => {
                   className="resize-none" 
                   rows={3}
                   required
+                  value={formData.description}
+                  onChange={handleChange}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="category">Category</Label>
-                  <Select defaultValue="meal">
+                  <Select 
+                    value={formData.category} 
+                    onValueChange={(value) => handleSelectChange("category", value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
@@ -79,7 +202,10 @@ const AddSurplus = () => {
                 </div>
                 <div>
                   <Label htmlFor="dietType">Diet Type</Label>
-                  <Select defaultValue="nonveg">
+                  <Select 
+                    value={formData.dietType} 
+                    onValueChange={(value) => handleSelectChange("dietType", value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select diet type" />
                     </SelectTrigger>
@@ -99,7 +225,17 @@ const AddSurplus = () => {
                   <Label htmlFor="originalPrice">Original Price ($)</Label>
                   <div className="relative">
                     <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input id="originalPrice" type="number" min="0" step="0.01" placeholder="0.00" className="pl-9" required />
+                    <Input 
+                      id="originalPrice" 
+                      type="number" 
+                      min="0" 
+                      step="0.01" 
+                      placeholder="0.00" 
+                      className="pl-9" 
+                      required 
+                      value={formData.originalPrice}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
                 
@@ -107,7 +243,17 @@ const AddSurplus = () => {
                   <Label htmlFor="discountedPrice">Discounted Price ($)</Label>
                   <div className="relative">
                     <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input id="discountedPrice" type="number" min="0" step="0.01" placeholder="0.00" className="pl-9" required />
+                    <Input 
+                      id="discountedPrice" 
+                      type="number" 
+                      min="0" 
+                      step="0.01" 
+                      placeholder="0.00" 
+                      className="pl-9" 
+                      required 
+                      value={formData.discountedPrice}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
               </div>
@@ -117,7 +263,14 @@ const AddSurplus = () => {
                   <Label htmlFor="expiryDate">Expiry/Best Before</Label>
                   <div className="relative">
                     <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input id="expiryDate" type="date" className="pl-9" required />
+                    <Input 
+                      id="expiryDate" 
+                      type="date" 
+                      className="pl-9" 
+                      required 
+                      value={formData.expiryDate}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
                 
@@ -125,7 +278,14 @@ const AddSurplus = () => {
                   <Label htmlFor="pickupTime">Available Until</Label>
                   <div className="relative">
                     <Clock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input id="pickupTime" type="time" className="pl-9" required />
+                    <Input 
+                      id="pickupTime" 
+                      type="time" 
+                      className="pl-9" 
+                      required 
+                      value={formData.pickupTime}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
               </div>
@@ -169,7 +329,7 @@ const AddSurplus = () => {
             type="submit" 
             className="w-full bg-[#472D21] hover:bg-[#5A392C] text-white py-6"
           >
-            List Surplus Item
+            {isEditing ? "Update Surplus Item" : "List Surplus Item"}
           </Button>
         </form>
       </div>

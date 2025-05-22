@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { 
   Form, 
   FormControl, 
@@ -54,6 +53,13 @@ const RegisterCompany = () => {
     // Set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userType", "business");
+    
+    // Store the business information
+    localStorage.setItem("businessName", data.businessName);
+    localStorage.setItem("businessType", data.businessType);
+    
+    // Set a flag for new registration to show welcome message
+    sessionStorage.setItem("newRegistration", "true");
     
     // Display success message
     toast({
