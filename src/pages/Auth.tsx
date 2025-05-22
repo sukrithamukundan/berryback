@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +30,6 @@ const Auth = () => {
   }, []);
   
   const redirectBasedOnType = (type: string) => {
-    console.log(`Redirecting user of type ${type} to appropriate page`);
     if (type === "business") {
       navigate('/business-listings', { replace: true });
     } else {
@@ -43,8 +41,6 @@ const Auth = () => {
     // For demo purposes, set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userType", userType);
-    
-    console.log(`User signing in as ${userType}`);
     
     toast({
       title: "Welcome back!",
