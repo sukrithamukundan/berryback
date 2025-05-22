@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -10,13 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { ChevronLeft, Building2, Mail, Phone, MapPin } from "lucide-react";
+import { ChevronLeft, Building2, Mail, Phone, MapPin, FileUp } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [userType, setUserType] = useState<"consumer" | "business">("consumer");
   const [showRegistration, setShowRegistration] = useState(false);
+  const [certificate, setCertificate] = useState<File | null>(null);
   
   const businessForm = useForm({
     defaultValues: {
@@ -55,8 +55,15 @@ const Auth = () => {
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userType", "business");
     
+    // Store certificate information if uploaded
+    const businessData = {
+      ...data,
+      certificateUploaded: certificate ? true : false,
+      certificateName: certificate ? certificate.name : null
+    };
+    
     // Store business data for future use
-    localStorage.setItem("businessData", JSON.stringify(data));
+    localStorage.setItem("businessData", JSON.stringify(businessData));
     
     toast({
       title: "Business registered!",
@@ -64,6 +71,16 @@ const Auth = () => {
     });
     
     navigate('/business-dashboard');
+  };
+
+  const handleCertificateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setCertificate(e.target.files[0]);
+      toast({
+        title: "Certificate uploaded",
+        description: `File "${e.target.files[0].name}" has been selected.`,
+      });
+    }
   };
 
   if (showRegistration) {
@@ -152,6 +169,40 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
+                  <Label htmlFor="certificate" className="text-[#472D21]">Food Safety Certificate</Label>
+                  <div className="border-2 border-dashed border-[#472D21]/30 rounded-md p-6 text-center">
+                    <div className="mb-4 flex justify-center">
+                      <FileUp className="h-10 w-10 text-[#472D21]/50" />
+                    </div>
+                    <p className="text-sm text-gray-500 mb-3">Upload your food safety certificate (required)</p>
+                    
+                    <div className="relative">
+                      <Input
+                        id="certificate"
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        onChange={handleCertificateChange}
+                        required
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        className="border-[#472D21] text-[#472D21]"
+                      >
+                        Select Certificate
+                      </Button>
+                    </div>
+                    
+                    {certificate && (
+                      <p className="mt-3 text-sm text-green-600">
+                        {certificate.name} ({Math.round(certificate.size / 1024)} KB)
+                      </p>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
                   <Label htmlFor="description" className="text-[#472D21]">Business Description</Label>
                   <Textarea
                     id="description"
@@ -165,6 +216,7 @@ const Auth = () => {
               <Button 
                 type="submit"
                 className="bg-[#472D21] hover:bg-[#5A392C] w-full text-white py-6 text-lg mt-4"
+                disabled={!certificate}
               >
                 Complete Registration
               </Button>

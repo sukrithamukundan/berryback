@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ChevronLeft, Edit, Building2, MapPin, Phone, Mail, TrendingUp, Award } from "lucide-react";
+import { ChevronLeft, Edit, Building2, MapPin, Phone, Mail, TrendingUp, Award, FileUp } from "lucide-react";
 import BusinessBottomNavBar from "@/components/BusinessBottomNavBar";
 import { useToast } from "@/hooks/use-toast";
 
@@ -15,6 +15,8 @@ interface BusinessData {
   phone?: string;
   address?: string;
   description?: string;
+  certificateUploaded?: boolean;
+  certificateName?: string;
 }
 
 const BusinessProfile = () => {
@@ -63,7 +65,9 @@ const BusinessProfile = () => {
           address: parsedData.address || businessData.address,
           phone: parsedData.phone || businessData.phone,
           email: parsedData.email || businessData.email,
-          description: parsedData.description
+          description: parsedData.description,
+          certificateUploaded: parsedData.certificateUploaded,
+          certificateName: parsedData.certificateName
         });
       } catch (error) {
         console.error("Error parsing business data:", error);
@@ -140,6 +144,14 @@ const BusinessProfile = () => {
               <Mail className="w-5 h-5 text-gray-500 mr-3" />
               <p className="text-gray-600">{businessData.email}</p>
             </div>
+            {businessData.certificateUploaded && (
+              <div className="flex items-center">
+                <FileUp className="w-5 h-5 text-green-500 mr-3" />
+                <p className="text-gray-600">
+                  Food Safety Certificate: {businessData.certificateName || "Verified"}
+                </p>
+              </div>
+            )}
             {businessData.description && (
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <p className="text-gray-700">{businessData.description}</p>
