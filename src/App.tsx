@@ -16,6 +16,7 @@ import AddSurplus from "./pages/AddSurplus";
 import ManageSurplus from "./pages/ManageSurplus";
 import BusinessOrders from "./pages/BusinessOrders";
 import BusinessProfile from "./pages/BusinessProfile";
+import BusinessListings from "./pages/BusinessListings";
 
 const queryClient = new QueryClient();
 
@@ -56,12 +57,12 @@ const App = () => {
           <Routes>
             <Route path="/" element={
               isLoggedIn && userType === "business" ? 
-                <Navigate to="/business-dashboard" replace /> : 
+                <Navigate to="/business-listings" replace /> : 
                 <Index skipSplash={true} />
             } />
             <Route path="/auth" element={
               isLoggedIn ? 
-                (userType === "business" ? <Navigate to="/business-dashboard" replace /> : <Navigate to="/" replace />) : 
+                (userType === "business" ? <Navigate to="/business-listings" replace /> : <Navigate to="/" replace />) : 
                 <Auth />
             } />
             <Route path="/orders" element={<Orders />} />
@@ -72,6 +73,11 @@ const App = () => {
             <Route path="/business-dashboard" element={
               isLoggedIn && userType === "business" ? 
                 <BusinessDashboard /> : 
+                <Navigate to="/auth" replace />
+            } />
+            <Route path="/business-listings" element={
+              isLoggedIn && userType === "business" ? 
+                <BusinessListings /> : 
                 <Navigate to="/auth" replace />
             } />
             <Route path="/add-surplus" element={

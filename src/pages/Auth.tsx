@@ -25,7 +25,7 @@ const Auth = () => {
   
   const redirectBasedOnType = (type: string) => {
     if (type === "business") {
-      navigate('/business-dashboard', { replace: true });
+      navigate('/business-listings', { replace: true });
     } else {
       navigate('/', { replace: true });
     }
