@@ -2,35 +2,54 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [userType, setUserType] = useState<"consumer" | "business">("consumer");
   
   const handleSignIn = () => {
     // For demo purposes, set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("userType", userType);
+    
     toast({
       title: "Welcome back!",
       description: "You've been successfully signed in.",
     });
-    navigate('/');
+    
+    if (userType === "business") {
+      navigate('/business-dashboard');
+    } else {
+      navigate('/');
+    }
   };
   
   const handleCreateAccount = () => {
     // For demo purposes, set the user as logged in
     localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("userType", userType);
+    
     toast({
       title: "Account created!",
       description: "Your account has been successfully created.",
     });
-    navigate('/');
+    
+    if (userType === "business") {
+      navigate('/business-dashboard');
+    } else {
+      navigate('/');
+    }
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
       <div className="max-w-xs w-full">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <div className="h-32 w-32 mx-auto mb-6">
             <svg 
               viewBox="0 0 100 100" 
@@ -64,6 +83,27 @@ const Auth = () => {
             Why wait in line when you can have your discounted food ready and waiting for you?
           </p>
         </div>
+        
+        <div className="mb-6">
+          <p className="text-lg font-medium text-[#472D21] mb-3 text-center">I am a...</p>
+          <RadioGroup 
+            defaultValue="consumer" 
+            value={userType} 
+            onValueChange={(value) => setUserType(value as "consumer" | "business")}
+            className="grid grid-cols-2 gap-4"
+          >
+            <div className="flex items-center space-x-2 border-2 border-[#472D21]/30 rounded-md p-3 hover:bg-[#472D21]/5 transition-colors">
+              <RadioGroupItem value="consumer" id="consumer" className="text-[#472D21]" />
+              <Label htmlFor="consumer" className="cursor-pointer flex-1">Customer</Label>
+            </div>
+            <div className="flex items-center space-x-2 border-2 border-[#472D21]/30 rounded-md p-3 hover:bg-[#472D21]/5 transition-colors">
+              <RadioGroupItem value="business" id="business" className="text-[#472D21]" />
+              <Label htmlFor="business" className="cursor-pointer flex-1">Business</Label>
+            </div>
+          </RadioGroup>
+        </div>
+        
+        <Separator className="my-6 bg-[#472D21]/20" />
         
         <div className="space-y-4">
           <Button 
