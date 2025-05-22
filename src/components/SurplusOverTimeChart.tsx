@@ -112,15 +112,13 @@ const SurplusOverTimeChart = ({
       
       forecastPoints.push({
         date: nextDate,
-        amount: 0, // Actual will be empty
         forecast: parseFloat(projectedValue.toFixed(1))
       });
     }
     
     // Combine historical data with forecast
     return data.map(item => ({ 
-      ...item, 
-      forecast: undefined 
+      ...item
     })).concat(forecastPoints);
   };
   
