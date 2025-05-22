@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -34,6 +33,9 @@ const BusinessDashboard = () => {
   
   // State for revenue chart modal
   const [showRevenueChart, setShowRevenueChart] = useState(false);
+  
+  // State for surplus chart time frame
+  const [surplusTimeFrame, setSurplusTimeFrame] = useState<"week" | "month" | "year">("week");
 
   // Mock dashboard metrics
   const dashboardMetrics = {
@@ -55,8 +57,8 @@ const BusinessDashboard = () => {
     { time: "3 PM", amount: 3.50 },
   ];
 
-  // Mock surplus over time data
-  const surplusOverTimeData = [
+  // Mock surplus over time data for different time frames
+  const surplusWeekData = [
     { date: "Apr 1", amount: 2.3 },
     { date: "Apr 2", amount: 3.1 },
     { date: "Apr 3", amount: 2.5 },
@@ -64,6 +66,10 @@ const BusinessDashboard = () => {
     { date: "Apr 5", amount: 2.7 },
     { date: "Apr 6", amount: 5.9 },
     { date: "Apr 7", amount: 4.8 },
+  ];
+
+  const surplusMonthData = [
+    ...surplusWeekData,
     { date: "Apr 8", amount: 3.5 },
     { date: "Apr 9", amount: 3.2 },
     { date: "Apr 10", amount: 3.7 },
@@ -71,7 +77,52 @@ const BusinessDashboard = () => {
     { date: "Apr 12", amount: 5.0 },
     { date: "Apr 13", amount: 4.2 },
     { date: "Apr 14", amount: 3.6 },
+    { date: "Apr 15", amount: 5.1 },
+    { date: "Apr 16", amount: 6.2 },
+    { date: "Apr 17", amount: 4.3 },
+    { date: "Apr 18", amount: 3.9 },
+    { date: "Apr 19", amount: 3.2 },
+    { date: "Apr 20", amount: 2.7 },
+    { date: "Apr 21", amount: 4.5 },
+    { date: "Apr 22", amount: 5.1 },
+    { date: "Apr 23", amount: 3.7 },
+    { date: "Apr 24", amount: 2.8 },
+    { date: "Apr 25", amount: 3.3 },
+    { date: "Apr 26", amount: 4.1 },
+    { date: "Apr 27", amount: 3.6 },
+    { date: "Apr 28", amount: 2.9 },
+    { date: "Apr 29", amount: 3.4 },
+    { date: "Apr 30", amount: 4.8 },
   ];
+  
+  const surplusYearData = [
+    { date: "Jan 2024", amount: 48.5 },
+    { date: "Feb 2024", amount: 42.3 },
+    { date: "Mar 2024", amount: 56.7 },
+    { date: "Apr 2024", amount: 68.3 },
+    { date: "May 2024", amount: 51.6 },
+    { date: "Jun 2024", amount: 45.2 },
+    { date: "Jul 2024", amount: 50.1 },
+    { date: "Aug 2024", amount: 63.4 },
+    { date: "Sep 2024", amount: 59.8 },
+    { date: "Oct 2024", amount: 48.7 },
+    { date: "Nov 2024", amount: 52.3 },
+    { date: "Dec 2024", amount: 67.9 },
+  ];
+
+  // Get the appropriate surplus data based on selected time frame
+  const getSurplusDataByTimeFrame = () => {
+    switch (surplusTimeFrame) {
+      case "week":
+        return surplusWeekData;
+      case "month":
+        return surplusMonthData;
+      case "year":
+        return surplusYearData;
+      default:
+        return surplusWeekData;
+    }
+  };
 
   // Mock ingredient waste data
   const ingredientWasteData = [
@@ -139,6 +190,10 @@ const BusinessDashboard = () => {
   
   const toggleRevenueChart = () => {
     setShowRevenueChart(prev => !prev);
+  };
+
+  const handleSurplusTimeFrameChange = (timeFrame: "week" | "month" | "year") => {
+    setSurplusTimeFrame(timeFrame);
   };
 
   if (isLoading) {
@@ -216,8 +271,12 @@ const BusinessDashboard = () => {
           {/* Surplus over time chart */}
           <Card className="p-4">
             <h3 className="text-lg font-semibold text-[#472D21] mb-2">Surplus Food Quantity Over Time</h3>
-            <div className="h-[200px]">
-              <SurplusOverTimeChart data={surplusOverTimeData} />
+            <div className="h-[250px]">
+              <SurplusOverTimeChart 
+                data={getSurplusDataByTimeFrame()} 
+                timeFrame={surplusTimeFrame}
+                onTimeFrameChange={handleSurplusTimeFrameChange}
+              />
             </div>
             <div className="mt-2 bg-blue-100 p-2 rounded-md flex items-center">
               <span className="text-blue-700 font-medium text-sm">Peak surplus typically occurs on Mondays</span>
