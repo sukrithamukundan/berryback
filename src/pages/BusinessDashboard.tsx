@@ -37,9 +37,6 @@ const BusinessDashboard = () => {
   // State for surplus chart time frame
   const [surplusTimeFrame, setSurplusTimeFrame] = useState<"week" | "month" | "year">("week");
 
-  // State for ingredient waste chart time frame
-  const [ingredientTimeFrame, setIngredientTimeFrame] = useState<"weekly" | "monthly" | "yearly">("weekly");
-
   // Mock dashboard metrics
   const dashboardMetrics = {
     todaySurplus: 8,
@@ -113,30 +110,6 @@ const BusinessDashboard = () => {
     { date: "Dec 2024", amount: 67.9 },
   ];
 
-  // Mock ingredient waste data with different time frames
-  const ingredientWasteData = {
-    weekly: [
-      { name: "Bread", value: 40 },
-      { name: "Vegetables", value: 25 },
-      { name: "Fruits", value: 20 },
-      { name: "Dairy", value: 15 },
-    ],
-    monthly: [
-      { name: "Bread", value: 35 },
-      { name: "Vegetables", value: 30 },
-      { name: "Fruits", value: 15 },
-      { name: "Dairy", value: 10 },
-      { name: "Meat", value: 10 },
-    ],
-    yearly: [
-      { name: "Bread", value: 30 },
-      { name: "Vegetables", value: 25 },
-      { name: "Fruits", value: 15 },
-      { name: "Dairy", value: 15 },
-      { name: "Meat", value: 15 },
-    ]
-  };
-
   // Get the appropriate surplus data based on selected time frame
   const getSurplusDataByTimeFrame = () => {
     switch (surplusTimeFrame) {
@@ -150,6 +123,14 @@ const BusinessDashboard = () => {
         return surplusWeekData;
     }
   };
+
+  // Mock ingredient waste data
+  const ingredientWasteData = [
+    { name: "Bread", value: 40 },
+    { name: "Vegetables", value: 25 },
+    { name: "Fruits", value: 20 },
+    { name: "Dairy", value: 15 },
+  ];
 
   useEffect(() => {
     // Check authentication status
@@ -206,10 +187,6 @@ const BusinessDashboard = () => {
 
   const handleSurplusTimeFrameChange = (timeFrame: "week" | "month" | "year") => {
     setSurplusTimeFrame(timeFrame);
-  };
-
-  const handleIngredientTimeFrameChange = (timeFrame: "weekly" | "monthly" | "yearly") => {
-    setIngredientTimeFrame(timeFrame);
   };
 
   if (isLoading) {
@@ -296,16 +273,22 @@ const BusinessDashboard = () => {
             </div>
           </Card>
           
-          {/* Ingredient waste chart */}
-          <Card className="p-4">
-            <h3 className="text-lg font-semibold text-[#472D21] mb-2">Ingredient Waste Breakdown</h3>
-            <div className="h-[250px]">
-              <IngredientWasteChart 
-                data={ingredientWasteData}
-                onTimeFrameChange={handleIngredientTimeFrameChange}
-              />
-            </div>
-          </Card>
+          {/* Ingredient waste charts - side by side on larger screens */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="p-4">
+              <h3 className="text-lg font-semibold text-[#472D21] mb-2">Ingredient Waste Breakdown</h3>
+              <div className="h-[200px]">
+                <IngredientWasteChart data={ingredientWasteData} />
+              </div>
+            </Card>
+            
+            <Card className="p-4">
+              <h3 className="text-lg font-semibold text-[#472D21] mb-2">Daily Ingredient Waste Trends</h3>
+              <div className="h-[200px]">
+                <IngredientWasteChart data={ingredientWasteData} variant="donut" />
+              </div>
+            </Card>
+          </div>
           
           {/* Waste reduction stats */}
           <Card className="p-4">
