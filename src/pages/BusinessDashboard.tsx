@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -122,13 +121,7 @@ const BusinessDashboard = () => {
   }, [navigate]);
   
   const handleAddSurplus = () => {
-    toast({
-      title: "Feature Coming Soon",
-      description: "The ability to add surplus items is under development.",
-    });
-    // For demo purposes, mark as having items
-    localStorage.setItem("hasSurplusItems", "true");
-    setIsNewBusiness(false);
+    navigate("/add-surplus");
   };
 
   const handleEditItem = (itemId: string) => {
