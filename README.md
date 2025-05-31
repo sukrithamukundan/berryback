@@ -1,73 +1,126 @@
-# Welcome to your Lovable project
 
-## Project info
+# BerryBack 🍓
 
-**URL**: https://lovable.dev/projects/ede44dca-bd19-40c7-99fa-ea69df08cfb2
+**Reducing food waste by connecting surplus food from restaurants and retailers with consumers at discounted prices.**
 
-## How can I edit this code?
+BerryBack is a web application that addresses the critical issue of food waste by creating a marketplace where businesses can sell their surplus food to consumers at reduced prices. With 1.05 billion tons of food wasted annually while 828 million people go hungry, BerryBack provides a win-win solution that benefits businesses, consumers, and the environment.
 
-There are several ways of editing your application.
+## 🌟 Features
 
-**Use Lovable**
+### For Consumers
+- **Real-time Food Listings**: Browse discounted surplus food from local restaurants and retailers
+- **Category Filtering**: Find food by type (restaurants, retailers, catering, confectionery)
+- **Location-based Discovery**: Find nearby food offerings in your area
+- **Mobile-first Design**: Optimized for smartphone usage with intuitive navigation
+- **Order Management**: Track your purchases and pickup times
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ede44dca-bd19-40c7-99fa-ea69df08cfb2) and start prompting.
+### For Businesses
+- **Surplus Management Dashboard**: Easy-to-use interface for listing surplus food
+- **Analytics & Insights**: Track waste patterns and revenue recovery
+- **Inventory Optimization**: Data-driven insights to reduce over-ordering
+- **Order Management**: Manage customer orders and pickup schedules
 
-Changes made via Lovable will be committed automatically to this repo.
+### Environmental Impact
+- **Waste Reduction Tracking**: Monitor tons of food saved from landfills
+- **Emissions Reduction**: Track CO2 emissions prevented through waste reduction
+- **Monthly Surplus Maps**: Visual data to identify waste patterns
 
-**Use your preferred IDE**
+## 🚀 Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn package manager
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Installation
 
-Follow these steps:
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd berryback
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. Install dependencies:
+```bash
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+4. Open your browser and navigate to `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🛠️ Technology Stack
 
-**Use GitHub Codespaces**
+- **Frontend Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: Shadcn/ui
+- **Routing**: React Router DOM
+- **State Management**: React Query (TanStack Query)
+- **Icons**: Lucide React
+- **Charts**: Recharts
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📱 Application Structure
 
-## What technologies are used for this project?
+```
+src/
+├── components/          # Reusable UI components
+├── pages/              # Main application pages
+├── hooks/              # Custom React hooks
+├── lib/                # Utility functions
+├── data/               # Mock data and constants
+└── models/             # TypeScript type definitions
+```
 
-This project is built with:
+## 🎯 Key Pages
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Landing Page**: Introduction to BerryBack with impact statistics
+- **Authentication**: User login and registration
+- **Consumer Dashboard**: Browse and purchase surplus food
+- **Business Dashboard**: Manage surplus listings and analytics
+- **Order Management**: Track purchases and sales
+- **Profile Management**: User account settings
 
-## How can I deploy this project?
+## 🌱 Environmental Impact
 
-Simply open [Lovable](https://lovable.dev/projects/ede44dca-bd19-40c7-99fa-ea69df08cfb2) and click on Share -> Publish.
+BerryBack addresses several critical environmental challenges:
 
-## Can I connect a custom domain to my Lovable project?
+- **Food Waste**: 1.05 billion tons of food wasted annually
+- **Hunger**: 828 million people go hungry worldwide
+- **Emissions**: Food waste accounts for 10% of global greenhouse gas emissions
 
-Yes, you can!
+By connecting surplus food with consumers, BerryBack helps:
+- Reduce methane emissions from landfills
+- Conserve water, land, and energy used in food production
+- Provide affordable food access to communities
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🔧 Development
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint for code quality
+
+### Code Quality
+
+This project follows modern React best practices:
+- TypeScript for type safety
+- Component-based architecture
+- Responsive design with Tailwind CSS
+- Accessible UI components from Shadcn/ui
+
+## 📄 License
+
+This project is part of a sustainability initiative to reduce food waste and improve food security.
+
+## 🤝 Contributing
+
+BerryBack is committed to making a positive environmental impact. Contributions that enhance the platform's ability to reduce food waste are welcome.
+
+---
+
+**Together, we can make a difference in reducing food waste and building a more sustainable future.** 🌍
