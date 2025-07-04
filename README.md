@@ -1,26 +1,73 @@
+# Welcome to your Lovable project
 
-# BerryBack 🍓
+## Project info
 
-**Reducing food waste by connecting surplus food from restaurants and retailers with consumers at discounted prices.**
+**URL**: https://lovable.dev/projects/ede44dca-bd19-40c7-99fa-ea69df08cfb2
 
-BerryBack is a web application that addresses the critical issue of food waste by creating a marketplace where businesses can sell their surplus food to consumers at reduced prices. With 1.05 billion tons of food wasted annually while 828 million people go hungry, BerryBack provides a win-win solution that benefits businesses, consumers, and the environment.
+## How can I edit this code?
 
-## 🌟 Features
+There are several ways of editing your application.
 
-### For Consumers
-- **Real-time Food Listings**: Browse discounted surplus food from local restaurants and retailers
-- **Category Filtering**: Find food by type (restaurants, retailers, catering, confectionery)
-- **Location-based Discovery**: Find nearby food offerings in your area
-- **Mobile-first Design**: Optimized for smartphone usage with intuitive navigation
-- **Order Management**: Track your purchases and pickup times
+**Use Lovable**
 
-### For Businesses
-- **Surplus Management Dashboard**: Easy-to-use interface for listing surplus food
-- **Analytics & Insights**: Track waste patterns and revenue recovery
-- **Inventory Optimization**: Data-driven insights to reduce over-ordering
-- **Order Management**: Manage customer orders and pickup schedules
+Simply visit the [Lovable Project](https://lovable.dev/projects/ede44dca-bd19-40c7-99fa-ea69df08cfb2) and start prompting.
 
-### Environmental Impact
-- **Waste Reduction Tracking**: Monitor tons of food saved from landfills
-- **Emissions Reduction**: Track CO2 emissions prevented through waste reduction
-- **Monthly Surplus Maps**: Visual data to identify waste patterns
+Changes made via Lovable will be committed automatically to this repo.
+
+**Use your preferred IDE**
+
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+
+Follow these steps:
+
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
+
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
+
+# Step 3: Install the necessary dependencies.
+npm i
+
+# Step 4: Start the development server with auto-reloading and an instant preview.
+npm run dev
+```
+
+**Edit a file directly in GitHub**
+
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
+
+**Use GitHub Codespaces**
+
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
+
+## What technologies are used for this project?
+
+This project is built with:
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+
+## How can I deploy this project?
+
+Simply open [Lovable](https://lovable.dev/projects/ede44dca-bd19-40c7-99fa-ea69df08cfb2) and click on Share -> Publish.
+
+## Can I connect a custom domain to my Lovable project?
+
+Yes, you can!
+
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
